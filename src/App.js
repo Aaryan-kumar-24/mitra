@@ -6,6 +6,7 @@ import { Pg_card_details } from './Pg_card_details';
 function App() {
   return(
     <>
+     
     </>
   );
 }

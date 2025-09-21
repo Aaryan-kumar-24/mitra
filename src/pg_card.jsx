@@ -2,6 +2,8 @@ import './App.css';
 import { pgList } from './data/pg_data';
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
+import {Header} from "./header";
+
 
 function Pg() {
   const texts = [
@@ -47,6 +49,7 @@ function Pg() {
 
   return (
     <>
+    <Header/>
       <div className="flex w-[600px] p-[40px]">
         <div className="flex w-full max-w-md md:max-w-lg lg:max-w-2xl items-center gap-2">
           {/* Controlled Input */}
@@ -95,7 +98,7 @@ function Pgcard({ data }) {
         >
           <i className="fas fa-eye"></i>
           
-<Link to={`/${data.id}`}>
+<Link to={`/pg/${data.id}`}>
   More
 </Link>
 
