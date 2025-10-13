@@ -14,8 +14,8 @@ import { Footer } from './footer';
 import { Skills } from './skills';
 import { Home } from './home';
 import { Accounts } from './accounts';
-
-
+import Login_signup from './login_signup';
+import { Skill_Details } from './skills_details';
 let allroutes= createBrowserRouter([
 {path: '/pg', element:<Pg/>},
 {path: '/pg/:id', element:<Pg_card_details/>},
@@ -25,8 +25,11 @@ let allroutes= createBrowserRouter([
 {path: '/Notes', element:<Notes/>},
 {path: '/Footer', element:<Footer/>},
 {path: '/Skills', element:<Skills/>},
+{path: '/skill_details', element:<Skill_Details/>},
 {path: '/', element:<Home/>},
+{path: '/Login_signup', element:<Login_signup/>},
 
+  { path: "/skill_details/:skillName", element: <Skill_Details /> }
 
 ])
 
