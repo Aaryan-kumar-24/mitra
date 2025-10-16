@@ -9,6 +9,8 @@ import  { useState, useEffect } from "react";
 function Notes() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(""); // category state
+  const [showUploadModal, setShowUploadModal] = useState(false);
+
 
   // Filter notes by search + category (from description)
   const filteredNotes = notesData.filter((note) => {
@@ -82,6 +84,79 @@ function Notes() {
               </li>
             ))}
           </ul>
+          {/* Upload Notes Button + Modal */}
+<div className="mt-40 text-center">
+  <button
+    onClick={() => setShowUploadModal(true)}
+    className="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2 rounded-xl shadow-md transition-all"
+  >
+    📤 Upload Your Notes
+  </button>
+</div>
+
+{showUploadModal && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
+      
+      {/* Close Button */}
+      <button
+        className="absolute top-4 right-4 text-sky-500 hover:text-sky-700 text-2xl font-bold transition"
+        onClick={() => setShowUploadModal(false)}
+      >
+        ✖
+      </button>
+
+      {/* Modal Title */}
+      <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
+        Upload Your Notes
+      </h3>
+
+      {/* Form */}
+      <form className="flex flex-col gap-5">
+        {/* Title/Subject Name */}
+        <input
+          type="text"
+          placeholder="Title or Subject Name"
+          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-white"
+          required
+        />
+
+        {/* Description */}
+        <textarea
+          placeholder="Description"
+          rows={3}
+          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full resize-none bg-white/40 placeholder-white"
+          required
+        />
+
+        {/* File Upload */}
+        <input
+          type="file"
+          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full cursor-pointer bg-white/50 text-white"
+          required
+        />
+
+        {/* Buttons */}
+        <div className="flex justify-between gap-4">
+          <button
+            type="button"
+            onClick={() => setShowUploadModal(false)}
+            className="flex-1 bg-slate-300 hover:bg-slate-200 text-white py-3 rounded-2xl font-semibold transition"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="flex-1 bg-sky-300 hover:bg-sky-500 text-white py-3 rounded-2xl font-semibold transition shadow-lg hover:shadow-xl"
+          >
+            Upload
+          </button>
+        </div>
+      </form>
+    </div>    
+  </div>
+)}
+
         </div>
       </div>
 
@@ -191,8 +266,10 @@ export function Headerfornotes() {
   return (
     <>
       {/* Fixed Header */}
-      <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-md flex items-center justify-evenly flex-wrap gap-4 p-1">
-        <div className="logo-container flex items-center gap-1">
+    <div className={`fixed top-0 left-0 w-full shadow-md flex items-center justify-evenly flex-wrap gap-4 p-1 ${
+  open ? "backdrop-blur-md bg-white/70 z-40" : "bg-white z-50"
+}`}>
+      <div className="logo-container flex items-center gap-1">
           <img src={logo} className="Logo w-10 h-10" alt="Logo" />
           <div className="logo-title text-xl font-bold text-sky-700">Aryavarta Mitra</div>
         </div>

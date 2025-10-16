@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { pgList } from "./data/pg_data";
 import aryan from "./image/aryan.jpg";
 import fab_location from "./image/fab_location.jpg";
-
+import { Header } from "./header";
 function Pg_card_details() {
   const { id } = useParams();
   const pg = pgList.find((p) => p.id === parseInt(id));
@@ -11,6 +11,7 @@ function Pg_card_details() {
 
   return (
     <>
+    <Header/>
       <div className="flex mt-4">
         <h1 className="font-medium font-sans ml-[30px] text-[1.8rem] italic">
           {pg.name}

@@ -19,10 +19,10 @@
         "roadmap": [
             { "step": "Step 1", "title": "Learn HTML", "desc": "Understand HTML structure, semantic tags, forms, and accessibility. Build static pages.", "color": "bg-blue-500" },
             { "step": "Step 2", "title": "Master CSS", "desc": "Learn selectors, box model, flexbox, grid layouts, animations, and responsive design.", "color": "bg-green-500" },
-            { "step": "Step 3", "title": "JavaScript Basics", "desc": "Understand variables, functions, DOM manipulation, events, ES6+, and asynchronous JavaScript.", "color": "bg-yellow-500" },
-            { "step": "Step 4", "title": "Frontend Frameworks", "desc": "Learn frameworks like React.js or Vue.js for dynamic, component-based UI.", "color": "bg-purple-500" },
-            { "step": "Step 5", "title": "Backend Basics", "desc": "Learn Node.js, Express.js, and REST APIs for front-end and database integration.", "color": "bg-indigo-500" },
-            { "step": "Step 6", "title": "Deploy & Optimize", "desc": "Deploy apps using Netlify, Vercel, or AWS, and optimize performance.", "color": "bg-red-500" }
+            { "step": "Step 3", "title": "JavaScript Basics", "desc": "Understand variables, functions, DOM manipulation, events, ES6+, and asynchronous JavaScript.", "color":"bg-blue-500"  },
+            { "step": "Step 4", "title": "Frontend Frameworks", "desc": "Learn frameworks like React.js or Vue.js for dynamic, component-based UI.", "color":"bg-green-500"  },
+            { "step": "Step 5", "title": "Backend Basics", "desc": "Learn Node.js, Express.js, and REST APIs for front-end and database integration.", "color": "bg-blue-500" },
+            { "step": "Step 6", "title": "Deploy & Optimize", "desc": "Deploy apps using Netlify, Vercel, or AWS, and optimize performance.", "color": "bg-green-500" }
         ]
         },
         {
@@ -43,10 +43,10 @@
         "roadmap": [
             { "step": "Step 1", "title": "Learn Python", "desc": "Understand Python syntax, data types, and libraries like NumPy and Pandas.", "color": "bg-blue-500" },
             { "step": "Step 2", "title": "Machine Learning Basics", "desc": "Learn supervised/unsupervised learning, classification, regression, clustering.", "color": "bg-green-500" },
-            { "step": "Step 3", "title": "Deep Learning", "desc": "Understand neural networks, CNNs, RNNs, and frameworks like TensorFlow/PyTorch.", "color": "bg-yellow-500" },
-            { "step": "Step 4", "title": "NLP & Computer Vision", "desc": "Study Natural Language Processing and computer vision techniques.", "color": "bg-purple-500" },
-            { "step": "Step 5", "title": "AI Ethics", "desc": "Learn ethical concerns, bias, and safe AI design.", "color": "bg-indigo-500" },
-            { "step": "Step 6", "title": "Deploy AI Models", "desc": "Deploy models using cloud services and APIs.", "color": "bg-red-500" }
+            { "step": "Step 3", "title": "Deep Learning", "desc": "Understand neural networks, CNNs, RNNs, and frameworks like TensorFlow/PyTorch.", "color":"bg-blue-500" },
+            { "step": "Step 4", "title": "NLP & Computer Vision", "desc": "Study Natural Language Processing and computer vision techniques.", "color":"bg-green-500" },
+            { "step": "Step 5", "title": "AI Ethics", "desc": "Learn ethical concerns, bias, and safe AI design.", "color":"bg-blue-500" },
+            { "step": "Step 6", "title": "Deploy AI Models", "desc": "Deploy models using cloud services and APIs.", "color":"bg-green-500" }
         ]
         },
         {
@@ -66,10 +66,10 @@
         "roadmap": [
             { "step": "Step 1", "title": "Cloud Computing Basics", "desc": "Understand cloud concepts, IaaS/PaaS/SaaS models.", "color": "bg-blue-500" },
             { "step": "Step 2", "title": "AWS Core Services", "desc": "Learn EC2, S3, Lambda, and other AWS services.", "color": "bg-green-500" },
-            { "step": "Step 3", "title": "Azure Basics", "desc": "Understand Azure core offerings and services.", "color": "bg-yellow-500" },
-            { "step": "Step 4", "title": "Google Cloud Platform", "desc": "Learn GCP basics and core services.", "color": "bg-purple-500" },
-            { "step": "Step 5", "title": "Cloud Security", "desc": "Learn cloud security principles and compliance.", "color": "bg-indigo-500" },
-            { "step": "Step 6", "title": "Deploy Cloud Applications", "desc": "Deploy scalable apps using cloud platforms.", "color": "bg-red-500" }
+            { "step": "Step 3", "title": "Azure Basics", "desc": "Understand Azure core offerings and services.", "color": "bg-blue-500" },
+            { "step": "Step 4", "title": "Google Cloud Platform", "desc": "Learn GCP basics and core services.", "color": "bg-green-500" },
+            { "step": "Step 5", "title": "Cloud Security", "desc": "Learn cloud security principles and compliance.", "color": "bg-blue-500" },
+            { "step": "Step 6", "title": "Deploy Cloud Applications", "desc": "Deploy scalable apps using cloud platforms.", "color": "bg-green-500" }
         ]
         },
         {
@@ -89,10 +89,10 @@
         "roadmap": [
             { "step": "Step 1", "title": "Learn SQL Basics", "desc": "Understand queries, joins, indexes, and constraints.", "color": "bg-blue-500" },
             { "step": "Step 2", "title": "Advanced SQL", "desc": "Learn stored procedures, triggers, optimization.", "color": "bg-green-500" },
-            { "step": "Step 3", "title": "Database Design", "desc": "Design normalized relational databases.", "color": "bg-yellow-500" },
-            { "step": "Step 4", "title": "NoSQL Databases", "desc": "Learn MongoDB, Cassandra, and use cases.", "color": "bg-purple-500" },
-            { "step": "Step 5", "title": "Database Security", "desc": "Understand encryption, authentication, and access control.", "color": "bg-indigo-500" },
-            { "step": "Step 6", "title": "Performance Tuning", "desc": "Learn indexing strategies, query optimization, and caching.", "color": "bg-red-500" }
+            { "step": "Step 3", "title": "Database Design", "desc": "Design normalized relational databases.", "color": "bg-blue-500" },
+            { "step": "Step 4", "title": "NoSQL Databases", "desc": "Learn MongoDB, Cassandra, and use cases.", "color": "bg-green-500" },
+            { "step": "Step 5", "title": "Database Security", "desc": "Understand encryption, authentication, and access control.", "color": "bg-blue-500" },
+            { "step": "Step 6", "title": "Performance Tuning", "desc": "Learn indexing strategies, query optimization, and caching.", "color": "bg-green-500" }
         ]
         }
     ]

@@ -352,7 +352,7 @@ export function StudentProjectsSlider() {
       </button>
 
       {/* Modal Title */}
-      <h3 className="text-3xl font-extrabold mb-6 text-sky-600 text-center">
+      <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
         Upload Project
       </h3>
 
@@ -366,7 +366,7 @@ export function StudentProjectsSlider() {
           value={newProject.studentName}
           onChange={handleInputChange}
           required
-          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-sky-400"
+          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-white"
         />
 
         {/* Project Title */}
@@ -377,7 +377,7 @@ export function StudentProjectsSlider() {
           value={newProject.title}
           onChange={handleInputChange}
           required
-          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-sky-400"
+          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-white"
         />
 
         {/* Description */}
@@ -388,7 +388,7 @@ export function StudentProjectsSlider() {
           onChange={handleInputChange}
           required
           rows={4}
-          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full resize-none bg-white/40 placeholder-sky-400"
+          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full resize-none bg-white/40 placeholder-white"
         />
 
         {/* Video Upload */}
@@ -397,7 +397,7 @@ export function StudentProjectsSlider() {
           accept="video/*"
           onChange={handleVideoChange}
           required
-          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full cursor-pointer bg-white/50"
+          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full cursor-pointer bg-white/50 text-white"
         />
 
         {/* Submit Button */}
