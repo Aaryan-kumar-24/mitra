@@ -1,26 +1,79 @@
 
 import notesData from "./data/notes";
 
+import axios from "axios";
 import logo from "./image/logo.jpg";
 import { Link, useLocation } from "react-router-dom";
 
 import  { useState, useEffect } from "react";
-
 function Notes() {
+  const [notesData, setNotesData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(""); // category state
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [showUploadModal, setShowUploadModal] = useState(false);
 
+  // ✅ Upload form states
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [file, setFile] = useState(null);
+  const [uploadedBy, setUploadedBy] = useState(""); // 👈 user input for uploader name
 
-  // Filter notes by search + category (from description)
+  // ✅ Fetch notes from backend
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/get-notes");
+        setNotesData(res.data);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      }
+    };
+    fetchNotes();
+  }, []);
+
+  // ✅ Handle Upload Submit
+  const handleUploadSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!uploadedBy.trim()) {
+      alert("Please enter your name in 'Uploaded By' field.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("Description", description);
+    formData.append("file", file);
+    formData.append("uploaded_by", uploadedBy); // 👈 send uploader name
+
+    try {
+      const response = await axios.post("http://localhost:8000/add-note", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      alert("✅ Note uploaded successfully!");
+      setNotesData([...notesData, response.data.note]);
+      setTitle("");
+      setDescription("");
+      setFile(null);
+      setUploadedBy("");
+      setShowUploadModal(false);
+    } catch (error) {
+      alert("❌ Upload failed!");
+      console.error(error);
+    }
+  };
+
+  // ✅ Filtering
   const filteredNotes = notesData.filter((note) => {
     const matchesSearch =
       note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      note.description.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesCategory =
-      selectedCategory === "" ||
-      note.description.toLowerCase().includes(selectedCategory.toLowerCase());
+      note.Description.toLowerCase().includes(searchTerm.toLowerCase());
+const matchesCategory =
+  selectedCategory === "" ||
+  note.about?.some((a) =>
+    a.label.toLowerCase().includes(selectedCategory.toLowerCase())
+  );
 
     return matchesSearch && matchesCategory;
   });
@@ -40,8 +93,7 @@ function Notes() {
 
       {/* Sidebar */}
       <div className="fixed top-[63px] left-0 h-[calc(100vh-62px)] w-[300px] bg-white shadow-lg border-r border-slate-300 flex flex-col">
-        {/* Search Bar */}
-        <div className="p-4  border-slate-200">
+        <div className="p-4">
           <input
             type="text"
             placeholder="Search notes..."
@@ -51,11 +103,8 @@ function Notes() {
           />
         </div>
 
-        {/* Categories */}
         <div className="flex-1 overflow-y-auto p-4">
-          <h2 className="text-slate-700 font-semibold mb-3 text-lg">
-            Categories
-          </h2>
+          <h2 className="text-slate-700 font-semibold mb-3 text-lg">Categories</h2>
           <ul className="space-y-2">
             <li>
               <button
@@ -84,140 +133,67 @@ function Notes() {
               </li>
             ))}
           </ul>
-          {/* Upload Notes Button + Modal */}
-<div className="mt-40 text-center">
-  <button
-    onClick={() => setShowUploadModal(true)}
-    className="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2 rounded-xl shadow-md transition-all"
-  >
-    📤 Upload Your Notes
-  </button>
-</div>
 
-{showUploadModal && (
-  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
-      
-      {/* Close Button */}
-      <button
-        className="absolute top-4 right-4 text-sky-500 hover:text-sky-700 text-2xl font-bold transition"
-        onClick={() => setShowUploadModal(false)}
-      >
-        ✖
-      </button>
-
-      {/* Modal Title */}
-      <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
-        Upload Your Notes
-      </h3>
-
-      {/* Form */}
-      <form className="flex flex-col gap-5">
-        {/* Title/Subject Name */}
-        <input
-          type="text"
-          placeholder="Title or Subject Name"
-          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-white"
-          required
-        />
-
-        {/* Description */}
-        <textarea
-          placeholder="Description"
-          rows={3}
-          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full resize-none bg-white/40 placeholder-white"
-          required
-        />
-
-        {/* File Upload */}
-        <input
-          type="file"
-          className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full cursor-pointer bg-white/50 text-white"
-          required
-        />
-
-        {/* Buttons */}
-        <div className="flex justify-between gap-4">
-          <button
-            type="button"
-            onClick={() => setShowUploadModal(false)}
-            className="flex-1 bg-slate-300 hover:bg-slate-200 text-white py-3 rounded-2xl font-semibold transition"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="flex-1 bg-sky-300 hover:bg-sky-500 text-white py-3 rounded-2xl font-semibold transition shadow-lg hover:shadow-xl"
-          >
-            Upload
-          </button>
-        </div>
-      </form>
-    </div>    
-  </div>
-)}
-
+          <div className="mt-40 text-center">
+            <button
+              onClick={() => setShowUploadModal(true)}
+              className="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2 rounded-xl shadow-md transition-all"
+            >
+              📤 Upload Your Notes
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="ml-[320px]">
-        <h1 className="mt-[40px] font-serif font-bold text-[2rem] text-center text-black">
-          View all Notes
+      {/* Main Notes Display */}
+      <div className="ml-[320px] mt-[40px]">
+        <h1 className="font-serif font-bold text-[2rem] text-center text-black">
+          View All Notes
         </h1>
 
         {filteredNotes.length > 0 ? (
           filteredNotes.map((note, index) => (
             <div
               key={index}
-              className="notes_card w-[1150px] flex h-[160px] mx-auto m-[40px] bg-slate-100 rounded-2xl hover:shadow-xl"
+              className="w-[1150px] flex h-[160px] mx-auto my-[40px] bg-slate-100 rounded-2xl hover:shadow-xl transition"
             >
-              {/* Left Content */}
-              <div className="notes w-[900px] h-[160px] pl-[20px] pt-[7px]">
-                <div className="title m-[5px] h-[30px] font-medium font-serif text-[1.4rem]">
-                  {note.title}
-                </div>
+              <div className="w-[900px] p-[20px]">
+                <h2 className="font-serif font-medium text-[1.4rem]">{note.title}</h2>
+                <p className="text-sm text-gray-700 mt-2">{note.Description}</p>
+{note.about && note.about.length > 0 && (
+  <div className="flex flex-wrap gap-3 mt-3">
+    {note.about.map((item, index) => (
+      <button
+        key={index}
+        className="text-sky-600 hover:bg-sky-400 hover:text-white bg-sky-100 rounded-xl px-[8px] text-[0.7rem] flex items-center gap-3 h-[30px]"
+      >
+        <i className={item.icon}></i> {item.label}
+      </button>
+    ))}
+  </div>
+)}
 
-                <div className="description m-[5px] font-extralight h-[60px]">
-                  {note.description}
-                </div>
-
-                {/* About Section with Icons */}
-                <div className="about m-[5px] flex h-[60px] flex-wrap">
-                  {note.about.map((item, i) => (
-                    <button
-                      key={i}
-                      className="h-[40px] text-sky-600 hover:bg-sky-400 hover:text-white bg-sky-100 rounded-xl px-[10px] mr-[15px] text-[0.9rem] flex items-center gap-2"
-                    >
-                      <i className={item.icon}></i> {item.label}
-                    </button>
-                  ))}
-                </div>
               </div>
 
-              {/* Right Side */}
-              <div className="download w-[220px] flex-wrap">
-                <div className="uploaded_by w-[100px] p-[6px] ml-[150px] bg-yellow-200 rounded-s-lg font-medium font-serif text-[0.68rem] flex items-center gap-2">
+              <div className="flex flex-col justify-center items-center w-[250px]">
+                <div className="text-[0.8rem] bg-yellow-200 px-3 py-1 rounded-lg font-medium mb-3">
                   <i className="fas fa-upload"></i> {note.uploaded_by}
                 </div>
 
-                {/* Preview Button */}
                 <a
-                  href={note.file}
+                  href={`http://localhost:8000${note.fileUrl}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 h-[35px] bg-sky-200 w-[150px] m-[20px] mt-[20px] text-[1rem] rounded-xl ml-[40px] hover:bg-sky-400 transition"
+                  className="bg-sky-300 hover:bg-sky-400 text-white px-4 py-2 rounded-xl mb-2 flex items-center gap-2 w-[138px] transition"
                 >
                   <i className="fas fa-eye"></i> Preview
                 </a>
 
-                {/* Download Button */}
                 <a
-                  href={note.file}
-                  download={`${note.title.replace(/\s+/g, "_")}_Notes.pdf`}
-                  className="flex items-center justify-center gap-2 h-[35px] bg-sky-200 w-[150px] m-[20px] text-[1rem] rounded-xl ml-[40px] hover:bg-sky-400 transition"
+                  href={`http://localhost:8000/download/${note.fileUrl.split("/").pop()}`}
+                  className="bg-sky-300 hover:bg-sky-400 text-white px-4 py-2 rounded-xl flex items-center w-[138px] gap-2 transition"
                 >
-                  <i className="fas fa-download"></i> Download
+                   <i className="fas fa-download"></i> Download
                 </a>
               </div>
             </div>
@@ -228,9 +204,70 @@ function Notes() {
           </p>
         )}
       </div>
+
+      {/* Upload Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
+            <button
+              className="absolute top-4 right-4 text-sky-500 hover:text-sky-700 text-2xl font-bold transition"
+              onClick={() => setShowUploadModal(false)}
+            >
+              ✖
+            </button>
+
+            <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
+              Upload Your Notes
+            </h3>
+
+            <form onSubmit={handleUploadSubmit} className="flex flex-col gap-5">
+              <input
+                type="text"
+                placeholder="Title or Subject Name"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/40 placeholder-white"
+              />
+              <textarea
+                placeholder="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+                rows={3}
+                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/40 placeholder-white"
+              />
+              <input
+                type="file"
+                onChange={(e) => setFile(e.target.files[0])}
+                required
+                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/40 text-white"
+              />
+
+              {/* ✅ Uploaded By Field */}
+              <input
+                type="text"
+                placeholder="Uploaded By (Your Name)"
+                value={uploadedBy}
+                onChange={(e) => setUploadedBy(e.target.value)}
+                required
+                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/40 placeholder-white"
+              />
+
+              <button
+                type="submit"
+                className="bg-sky-300 hover:bg-sky-500 text-white py-3 rounded-2xl font-semibold transition shadow-lg"
+              >
+                Upload
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </>
   );
 }
+
 
 export { Notes };
 
@@ -266,7 +303,7 @@ export function Headerfornotes() {
   return (
     <>
       {/* Fixed Header */}
-    <div className={`fixed top-0 left-0 w-full shadow-md flex items-center justify-evenly flex-wrap gap-4 p-1 ${
+    <div className={`fixed top-0 left-0 w-full shadow flex items-center justify-evenly flex-wrap gap-4 p-1 ${
   open ? "backdrop-blur-md bg-white/70 z-40" : "bg-white z-50"
 }`}>
       <div className="logo-container flex items-center gap-1">

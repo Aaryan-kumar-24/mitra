@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Header } from "./header";
-
+import axios from "axios";
 function Login_signup() {
   const [isLogin, setIsLogin] = useState(true);
   const [loginData, setLoginData] = useState({ phone: "", password: "" });
@@ -16,6 +16,7 @@ function Login_signup() {
 
   const handleLoginChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
+
   };
 
   const handleSignupChange = (e) => {
@@ -24,12 +25,30 @@ function Login_signup() {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    console.log("Login Data:", loginData);
+    axios
+      .post("http://localhost:8000/login-user", loginData)
+      .then((response) => {
+        alert("Data added successfully!");
+        console.log(response.data);
+      })
+      .catch((error) => {
+        alert("Error occurred");
+        console.error(error);
+      });
   };
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
-    console.log("Signup Data:", signupData);
+        axios
+      .post("http://localhost:8000/signup-user", signupData)
+      .then((response) => {
+        alert("Data added successfully!");
+        console.log(response.data);
+      })
+      .catch((error) => {
+        alert("Error occurred");
+        console.error(error);
+      });
   };
 
   return (
