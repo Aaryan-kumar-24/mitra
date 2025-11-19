@@ -1,12 +1,14 @@
-import './App.css';
-import Pg from './pg_card';
-import { Pg_card_details } from './Pg_card_details';
-
+// src/App.jsx (Example structure for the layout to work)
+import { Outlet } from 'react-router-dom';
 
 function App() {
-  return(
+  return (
     <>
-     
+      <main className="content">
+        {/* The Outlet renders the component for the current route path (Home, Pg, Shops, etc.) */}
+        <Outlet /> 
+      </main>
+      
     </>
   );
 }

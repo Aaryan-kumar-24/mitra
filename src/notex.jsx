@@ -341,6 +341,11 @@ export function Headerfornotes() {
           </button>
         </Link>
 
+<Link to={"/chat"}>
+  <button className={getButtonClasses("/chat")}>
+    <i className="fas fa-comments"></i> Chat
+  </button>
+</Link>
         <button
           onClick={() => setOpen(true)}
           className={getButtonClasses("/account")}

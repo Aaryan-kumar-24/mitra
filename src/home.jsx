@@ -1,55 +1,50 @@
+// src/home.jsx (or whatever your file is named)
+
 import { useEffect, useState } from "react";
 import { Header } from "./header";
 import { Link } from "react-router-dom";
-
 import axios from "axios";
+// Ensure these image paths are correct
 import fab from "../src/image/fab1.jpg";
 import shree from "../src/image/shree.jpg";
-import f1 from "../src/image/f1.jpg"
+import f1 from "../src/image/f1.jpg";
+import f2 from "../src/image/f2.jpg";
 
-import f2 from "../src/image/f2.jpg"
 
-// ---------------- Home ----------------
+// ---------------- 1. Home (Parent Component) ----------------
+// Use named export for the main route component
 export function Home() {
 
+  // Components in the same file can be used directly after their definition
   return (
     <>
+      {/* Header is imported at the top */}
       <Header />
+      
+      {/* Components defined later in this file */}
       <Corosel />
       <Features />
-      <StudentProjectsSlider/>
-      <StudentMarket/>
-      <SellItemModal/>
-      <Footer/>
-
+      <StudentProjectsSlider />
+      <StudentMarket /> 
+      <SellItemModal /> 
+      <Footer /> 
     </>
   );
 }
 
+// ---------------- 2. Corosel ----------------
 export function Corosel() {
   const [current, setCurrent] = useState(0);
 
   const slides = [
     <div key={1} className="w-full bg-red-200 flex-shrink-0 h-[400px]">
-      <img
-        src="/static/b4.jpg"
-        alt="Slide 1"
-        className="w-full h-full object-cover"
-      />
+      <img src="/static/b4.jpg" alt="Slide 1" className="w-full h-full object-cover" />
     </div>,
     <div key={2} className="w-full bg-blue-200 flex-shrink-0 h-[400px]">
-      <img
-        src="/static/b1.jpg"
-        alt="Slide 2"
-        className="w-full h-full object-cover"
-      />
+      <img src="/static/b1.jpg" alt="Slide 2" className="w-full h-full object-cover" />
     </div>,
     <div key={3} className="w-full bg-green-200 flex-shrink-0 h-[400px]">
-      <img
-        src="/static/b7.jpg"
-        alt="Slide 3"
-        className="w-full h-full object-cover"
-      />
+      <img src="/static/b7.jpg" alt="Slide 3" className="w-full h-full object-cover" />
     </div>,
   ];
 
@@ -96,119 +91,69 @@ export function Corosel() {
     </div>
   );
 }
+
+// ---------------- 3. Features ----------------
 export function Features() {
   const features = [
-    {
-      title: "🏠 PG Finder",
-      description:
-        "Explore verified PGs with food, rent, rooms, and facilities near your college.",
-      image: shree,
-      link: "/pgs",
-    },
-    {
-      title: "📘 Notes Hub",
-      description:
-        "Get notes by branch, semester, and subject. Search, download, or share notes easily.",
-      image: shree,
-      link: "/notes",
-    },
-    {
-      title: "🛍️ Nearby Shops",
-      description:
-        "Find shops near your college with location, timings, distance, and contact info.",
-      image: shree,
-      link: "/shops",
-    },
-    {
-      title: "💡 Skill Learning",
-      description:
-        "Learn top-demand skills with roadmaps, resources, and career guidance.",
-      image: shree,
-      link: "/skills",
-    },
-    {
-      title: "🚀 Projects & Collaboration",
-      description:
-        "Showcase your projects or find collaborators for new ideas and innovations.",
-      image: shree,
-      link: "/projects",
-    },
-    {
-      title: "🎯 College Events",
-      description:
-        "Stay updated with hackathons, ideathons, workshops, and campus events.",
-      image: shree,
-      link: "/events",
-    },
-    {
-      title: "🛒 Marketplace",
-      description:
-        "Buy or sell used items like books, electronics, or notes – all within your campus.",
-      image: shree,
-      link: "/marketplace",
-    },
-    {
-      title: "📢 Requests & Help",
-      description:
-        "Request urgent notes, items, or help from other students instantly.",
-      image: shree,
-      link: "/requests",
-    },
+    { title: "🏠 PG Finder", description: "Explore verified PGs with food, rent, rooms, and facilities near your college.", image: shree, link: "/pg" },
+    { title: "📘 Notes Hub", description: "Get notes by branch, semester, and subject. Search, download, or share notes easily.", image: shree, link: "/Notes" },
+    { title: "🛍️ Nearby Shops", description: "Find shops near your college with location, timings, distance, and contact info.", image: shree, link: "/shops" },
+    { title: "💡 Skill Learning", description: "Learn top-demand skills with roadmaps, resources, and career guidance.", image: shree, link: "/Skills" },
+    { title: "🚀 Projects & Collaboration", description: "Showcase your projects or find collaborators for new ideas and innovations.", image: shree, link: "/projects" },
+    { title: "🎯 College Events", description: "Stay updated with hackathons, ideathons, workshops, and campus events.", image: shree, link: "/events" },
+    { title: "🛒 Marketplace", description: "Buy or sell used items like books, electronics, or notes – all within your campus.", image: shree, link: "/marketplace" },
+    { title: "📢 Requests & Help", description: "Request urgent notes, items, or help from other students instantly.", image: shree, link: "/requests" },
   ];
 
   return (
     <section className="py-12 bg-gray-50">
       <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">
-         <i className="fas fa-users mr-10"></i> Features We Provide
+        <i className="fas fa-users mr-10"></i> Features We Provide
       </h1>
-<div className="container mx-auto px-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12">
-  {features.map((f, i) => (
-    <Link
-      to={f.link}
-      key={i}
-      className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transform hover:-translate-y-3 transition duration-300"
-    >
-      {/* Title attached at top */}
-      <div className="absolute top-0 left-0 w-full  p-2 text-left">
-        <h2 className="text-xl font-bold text-white drop-shadow-lg">
-          {f.title}
-        </h2>
+      <div className="container mx-auto px-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+        {features.map((f, i) => (
+          <Link
+            to={f.link}
+            key={i}
+            className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transform hover:-translate-y-3 transition duration-300"
+          >
+            {/* Title attached at top */}
+            <div className="absolute top-0 left-0 w-full p-2 text-left">
+              <h2 className="text-xl font-bold text-white drop-shadow-lg">
+                {f.title}
+              </h2>
+            </div>
+
+            {/* Image */}
+            <img
+              src={f.image}
+              alt={f.title}
+              className="w-full h-72 bg-red-200 object-cover"
+            />
+
+            {/* Glass effect overlay (bottom content) */}
+            <div className="absolute bottom-0 left-0 w-full p-6">
+              <p className="text-sm md:text-base text-white drop-shadow-md">
+                {f.description}
+              </p>
+            </div>
+          </Link>
+        ))}
       </div>
-
-      {/* Image */}
-      <img
-        src={f.image}
-        alt={f.title}
-        className="w-full h-72 bg-red-200 object-cover"
-      />
-
-      {/* Glass effect overlay (bottom content) */}
-      <div className="absolute bottom-0 left-0 w-full p-6">
-        <p className="text-sm md:text-base text-white drop-shadow-md">
-          {f.description}
-        </p>
-      </div>
-    </Link>
-  ))}
-</div>
-
     </section>
   );
 }
 
-
-export function StudentProjectsSlider() {
+// ---------------- 4. StudentProjectsSlider ----------------
+export function StudentProjectsSlider() { // Added 'export'
   const [projects, setProjects] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [newProject, setNewProject] = useState({
-    studentName: "",
-    title: "",
-    description: "",
-    video: null,
+    studentName: "", title: "", description: "", video: null,
   });
 
-  // ✅ Fetch all projects from backend (MongoDB)
+  // Fetch all projects from backend (MongoDB)
   useEffect(() => {
     axios
       .get("http://localhost:8000/get-projects")
@@ -230,7 +175,7 @@ export function StudentProjectsSlider() {
     setNewProject({ ...newProject, video: e.target.files[0] });
   };
 
-  // ✅ Handle video upload
+  // Handle video upload
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -284,7 +229,7 @@ export function StudentProjectsSlider() {
           ❮
         </button>
 
-        {/* Slider */}
+        {/* Slider (rest of the JSX remains the same...) */}
         <div className="relative w-full max-w-7xl flex justify-end h-[28rem]">
           {projects.map((proj, index) => {
             let offset = index - currentIndex;
@@ -318,10 +263,7 @@ export function StudentProjectsSlider() {
                   <video
                     src={videoUrl}
                     className="absolute inset-0 w-full h-full object-cover rounded-2xl"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
+                    autoPlay loop muted playsInline
                   />
                 ) : (
                   <img
@@ -345,8 +287,8 @@ export function StudentProjectsSlider() {
                     </p>
                     <button
                       className="absolute bottom-3 right-3 flex items-center gap-2 px-3 py-2 rounded-2xl
-                                 bg-sky-400/70 text-white font-semibold cursor-pointer
-                                 transition-all duration-300 hover:bg-sky-400/90 hover:translate-y-[-2px]"
+                            bg-sky-400/70 text-white font-semibold cursor-pointer
+                            transition-all duration-300 hover:bg-sky-400/90 hover:translate-y-[-2px]"
                     >
                       Connect
                     </button>
@@ -366,7 +308,7 @@ export function StudentProjectsSlider() {
         </button>
       </div>
 
-      {/* Upload Modal */}
+      {/* Upload Modal (rest of the JSX remains the same...) */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
@@ -382,50 +324,12 @@ export function StudentProjectsSlider() {
             </h3>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <input
-                type="text"
-                name="studentName"
-                placeholder="Student Name"
-                value={newProject.studentName}
-                onChange={handleInputChange}
-                required
-                className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-white"
-              />
-
-              <input
-                type="text"
-                name="title"
-                placeholder="Project Title"
-                value={newProject.title}
-                onChange={handleInputChange}
-                required
-                className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-white"
-              />
-
-              <textarea
-                name="description"
-                placeholder="Project Description"
-                value={newProject.description}
-                onChange={handleInputChange}
-                required
-                rows={4}
-                className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full resize-none bg-white/40 placeholder-white"
-              />
-
-              <input
-                type="file"
-                accept="video/*"
-                onChange={handleVideoChange}
-                required
-                className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full cursor-pointer bg-white/50 text-white"
-              />
-
-              <button
-                type="submit"
-                className="bg-sky-300 hover:bg-sky-500 text-white py-3 px-6 rounded-2xl font-semibold transition shadow-lg hover:shadow-xl w-full"
-              >
-                Submit
-              </button>
+              {/* Input fields */}
+              <input type="text" name="studentName" placeholder="Student Name" value={newProject.studentName} onChange={handleInputChange} required className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-white"/>
+              <input type="text" name="title" placeholder="Project Title" value={newProject.title} onChange={handleInputChange} required className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-white"/>
+              <textarea name="description" placeholder="Project Description" value={newProject.description} onChange={handleInputChange} required rows={4} className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full resize-none bg-white/40 placeholder-white"/>
+              <input type="file" accept="video/*" onChange={handleVideoChange} required className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full cursor-pointer bg-white/50 text-white"/>
+              <button type="submit" className="bg-sky-300 hover:bg-sky-500 text-white py-3 px-6 rounded-2xl font-semibold transition shadow-lg hover:shadow-xl w-full">Submit</button>
             </form>
           </div>
         </div>
@@ -434,11 +338,10 @@ export function StudentProjectsSlider() {
   );
 }
 
- function StudentMarket() {
+// ---------------- 5. StudentMarket ----------------
+export function StudentMarket() { // Changed from 'function' to 'export function'
   const texts = [
-    "Find the best student deals 🎒",
-    "Buy or sell items easily 💰",
-    "Connect directly with owners 📞",
+    "Find the best student deals 🎒", "Buy or sell items easily 💰", "Connect directly with owners 📞",
   ];
 
   const [text, setText] = useState("");
@@ -448,10 +351,9 @@ export function StudentProjectsSlider() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-
   const [itemList, setItemList] = useState([]);
 
-  // ✅ Fetch items from backend
+  // Fetch items from backend
   useEffect(() => {
     axios
       .get("http://localhost:8000/get-sell-items")
@@ -459,7 +361,7 @@ export function StudentProjectsSlider() {
       .catch((err) => console.error("Error fetching sell items:", err));
   }, []);
 
-  // ✅ Typing animation
+  // Typing animation
   useEffect(() => {
     const currentText = texts[index];
     const typingSpeed = isDeleting ? 50 : 120;
@@ -482,19 +384,15 @@ export function StudentProjectsSlider() {
     return () => clearTimeout(timeout);
   }, [charIndex, isDeleting, index, texts]);
 
-  
-  // ✅ Filter and pagination
+  // Filter and pagination
   const filteredItems = itemList.filter((item) => {
-    const priceStr = item.price ? String(item.price) : "";
-    const yearStr = item.yearUsed ? String(item.yearUsed) : "";
-    const qualityStr = item.quality ? String(item.quality) : "";
+    const search = searchTerm.toLowerCase();
+    const matchesName = item.name && item.name.toLowerCase().includes(search);
+    const matchesPrice = item.price && String(item.price).includes(search);
+    const matchesYear = item.yearUsed && String(item.yearUsed).toLowerCase().includes(search);
+    const matchesQuality = item.quality && String(item.quality).toLowerCase().includes(search);
 
-    return (
-      (item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      priceStr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      yearStr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      qualityStr.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    return matchesName || matchesPrice || matchesYear || matchesQuality;
   });
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
@@ -506,7 +404,7 @@ export function StudentProjectsSlider() {
 
   return (
     <div className="font-sans mt-10 mb-14 px-6">
-      {/* 🔍 Search + Title */}
+      {/* 🔍 Search + Title (rest of the JSX remains the same...) */}
       <div className="flex flex-col sm:flex-row items-center mb-28 gap-10">
         <div className="w-full sm:w-[45%] max-w-[500px]">
           <div className="relative">
@@ -516,7 +414,7 @@ export function StudentProjectsSlider() {
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={text || "Search items..."}
               className="pl-[60px] pr-4 focus:outline-none focus:border-sky-100 focus:ring-sky-100 focus:ring-1 
-                         w-full border-[2px] h-[45px] rounded-2xl placeholder:italic"
+                           w-full border-[2px] h-[45px] rounded-2xl placeholder:italic"
             />
             <button className="absolute top-0 right-0 h-full px-5 bg-sky-200 hover:bg-sky-300 text-white rounded-e-2xl transition-all shadow-md">
               <i className="fas fa-search"></i>
@@ -558,10 +456,10 @@ export function StudentProjectsSlider() {
                   <button
                     onClick={() => alert(`📞 Call ${item.phone} to contact owner`)}
                    className="absolute bottom-3 right-3 flex items-center gap-2 px-3 py-2 rounded-2xl
-                                 bg-sky-400/70 text-white font-semibold cursor-pointer
-                                 transition-all duration-300 hover:bg-sky-400/90 hover:translate-y-[-2px]"
-     >
-                   📞 {item.phone}
+                                bg-sky-400/70 text-white font-semibold cursor-pointer
+                                transition-all duration-300 hover:bg-sky-400/90 hover:translate-y-[-2px]"
+                  >
+                    📞 {item.phone}
                   </button>
                 </div>
               </div>
@@ -579,7 +477,7 @@ export function StudentProjectsSlider() {
             onClick={handlePrev}
             disabled={currentPage === 1}
             className="px-4 py-2 rounded-md font-medium border border-gray-300 bg-white text-gray-600
-                       hover:bg-gray-100 disabled:bg-gray-100 disabled:text-gray-400 transition"
+                         hover:bg-gray-100 disabled:bg-gray-100 disabled:text-gray-400 transition"
           >
             Previous
           </button>
@@ -589,11 +487,11 @@ export function StudentProjectsSlider() {
               key={page}
               onClick={() => setCurrentPage(page)}
               className={`px-4 py-2 rounded-md font-medium border transition
-                          ${
-                            currentPage === page
-                              ? "bg-sky-50 text-sky-600 border-sky-200 shadow-sm"
-                              : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
-                          }`}
+                           ${
+                             currentPage === page
+                               ? "bg-sky-50 text-sky-600 border-sky-200 shadow-sm"
+                               : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
+                           }`}
             >
               {page}
             </button>
@@ -603,7 +501,7 @@ export function StudentProjectsSlider() {
             onClick={handleNext}
             disabled={currentPage === totalPages}
             className="px-4 py-2 rounded-md font-medium border border-gray-300 bg-white text-gray-600
-                       hover:bg-gray-100 disabled:bg-gray-100 disabled:text-gray-400 transition"
+                         hover:bg-gray-100 disabled:bg-gray-100 disabled:text-gray-400 transition"
           >
             Next
           </button>
@@ -613,13 +511,8 @@ export function StudentProjectsSlider() {
   );
 }
 
-export default StudentMarket;
-
-
-
-
-
-export const Footer = () => {
+// ---------------- 6. Footer ----------------
+export const Footer = () => { // Changed from 'const' to 'export const'
   return (
     <footer style={{ width: "100%", backgroundColor: "#f5f5f5" }}>
       <div
@@ -631,7 +524,7 @@ export const Footer = () => {
         }}
       >
         <img
-          src= {f1}
+          src={f1}
           alt="Image 1"
           style={{ width: "50%", height: "auto", objectFit: "cover" }}
         />
@@ -644,10 +537,12 @@ export const Footer = () => {
     </footer>
   );
 };
- function SellItemModal() {
+
+// ---------------- 7. SellItemModal ----------------
+export function SellItemModal() { // Changed from 'function' to 'export function'
   const [showModal, setShowModal] = useState(false);
 
-  // ✅ Input States
+  // Input States
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [yearUsed, setYearUsed] = useState("");
@@ -655,7 +550,7 @@ export const Footer = () => {
   const [image, setImage] = useState(null);
   const [phone, setPhone] = useState("");
 
-  // ✅ Handle Submit
+  // Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -675,6 +570,7 @@ export const Footer = () => {
 
       if (res.ok) {
         alert("✅ Item uploaded successfully!");
+        // Clear form states and close modal
         setName("");
         setPrice("");
         setYearUsed("");
@@ -682,6 +578,8 @@ export const Footer = () => {
         setImage(null);
         setPhone("");
         setShowModal(false);
+        // You might need to refresh the `StudentMarket` item list here 
+        // by calling a function passed down from the parent or by refreshing the page
       } else {
         alert("❌ Upload failed!");
       }
@@ -693,7 +591,7 @@ export const Footer = () => {
 
   return (
     <>
-      {/* ✅ Floating Add Button (Plus Emoji) */}
+      {/* Floating Add Button (Plus Emoji) */}
       <button
         onClick={() => setShowModal(true)}
         className="fixed bottom-8 right-8 bg-gradient-to-r from-sky-400 to-cyan-500 text-white rounded-full shadow-2xl w-16 h-16 flex items-center justify-center text-3xl hover:scale-110 transition-all duration-300 animate-pulse"
@@ -701,11 +599,11 @@ export const Footer = () => {
         ➕
       </button>
 
-      {/* ✅ Modal */}
+      {/* Modal (rest of the JSX remains the same...) */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
-            {/* ❌ Close Button */}
+            {/* Close Button */}
             <button
               className="absolute top-4 right-4 text-sky-400 hover:text-sky-600 text-2xl font-bold transition"
               onClick={() => setShowModal(false)}
@@ -718,65 +616,15 @@ export const Footer = () => {
             </h3>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <input
-                type="text"
-                placeholder="Name of the Item"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"
-              />
-
-              <input
-                type="number"
-                placeholder="Price (₹)"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                required
-                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"
-              />
-
-              <input
-                type="text"
-                placeholder="Year Used (e.g., 2 Years)"
-                value={yearUsed}
-                onChange={(e) => setYearUsed(e.target.value)}
-                required
-                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"
-              />
-
-              <input
-                type="text"
-                placeholder="Quality (Excellent, Good, Average)"
-                value={quality}
-                onChange={(e) => setQuality(e.target.value)}
-                required
-                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"
-              />
-
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImage(e.target.files[0])}
-                required
-                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white"
-              />
-
-              <input
-                type="tel"
-                placeholder="Phone Number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"
-              />
-
-              <button
-                type="submit"
-                className="bg-gradient-to-r from-sky-400 to-cyan-500 hover:from-sky-500 hover:to-cyan-600 text-white py-3 rounded-2xl font-semibold transition shadow-lg"
-              >
-                Upload Item 
-              </button>
+              {/* Input fields */}
+              <input type="text" placeholder="Name of the Item" value={name} onChange={(e) => setName(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
+              <input type="number" placeholder="Price (₹)" value={price} onChange={(e) => setPrice(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
+              <input type="text" placeholder="Year Used (e.g., 2 Years)" value={yearUsed} onChange={(e) => setYearUsed(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
+              <input type="text" placeholder="Quality (Excellent, Good, Average)" value={quality} onChange={(e) => setQuality(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
+              <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white"/>
+              <input type="tel" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
+              
+              <button type="submit" className="bg-gradient-to-r from-sky-400 to-cyan-500 hover:from-sky-500 hover:to-cyan-600 text-white py-3 rounded-2xl font-semibold transition shadow-lg">Upload Item</button>
             </form>
           </div>
         </div>
@@ -785,3 +633,4 @@ export const Footer = () => {
   );
 }
 
+// REMOVE THIS LINE: export default StudentMarket;

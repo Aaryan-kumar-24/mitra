@@ -1,61 +1,66 @@
-import React, { useState } from "react";
-import { Header } from "./header";
+// src/Login_signup.jsx (Updated)
+import React, { useState,useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Header } from "./header";
+import { AuthContext } from "./AuthContext";
+
 function Login_signup() {
   const [isLogin, setIsLogin] = useState(true);
   const [loginData, setLoginData] = useState({ phone: "", password: "" });
   const [signupData, setSignupData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    password: "",
-    college: "",
-    branch: "",
-    year: "",
+    name: "", phone: "", email: "", password: "", college: "", branch: "", year: "",
   });
 
-  const handleLoginChange = (e) => {
-    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  const { login } = useContext(AuthContext); 
+  const navigate = useNavigate();
 
-  };
+  // Redirect if already authenticated
+  const { isAuthenticated } = useContext(AuthContext);
+  useEffect(() => {
+    if (isAuthenticated) {
+        navigate('/'); // Redirect to home if already logged in
+    }
+  }, [isAuthenticated, navigate]);
 
-  const handleSignupChange = (e) => {
-    setSignupData({ ...signupData, [e.target.name]: e.target.value });
-  };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  const handleSignupChange = (e) => setSignupData({ ...signupData, [e.target.name]: e.target.value });
+
+const handleLoginSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const { token, user } = await login(loginData.phone, loginData.password);
+
+    navigate("/");
+  } catch (error) {
+    alert(error.response?.data?.message || "Login failed.");
+  }
+};
+
+
+  const handleSignupSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:8000/login-user", loginData)
-      .then((response) => {
-        alert("Data added successfully!");
-        console.log(response.data);
-      })
-      .catch((error) => {
-        alert("Error occurred");
-        console.error(error);
-      });
+    try {
+      await axios.post("http://localhost:8000/signup-user", signupData);
+      
+      setIsLogin(true);
+      setLoginData({ phone: signupData.phone, password: "" });
+    } catch (error) {
+      alert(error.response?.data?.message || "Signup failed. Please try again.");
+    }
   };
 
-  const handleSignupSubmit = (e) => {
-    e.preventDefault();
-        axios
-      .post("http://localhost:8000/signup-user", signupData)
-      .then((response) => {
-        alert("Data added successfully!");
-        console.log(response.data);
-      })
-      .catch((error) => {
-        alert("Error occurred");
-        console.error(error);
-      });
-  };
+  if (isAuthenticated) return null; // Avoid rendering the form if redirecting
 
   return (
+    // ... (Your original JSX form structure remains here, but remove the Header import at the top)
     <>
-      <Header />
+      <Header /> {/* Keeping header here for visual context, but it won't be protected */}
       <div className="min-h-screen flex justify-center bg-gray-100 p-4">
-        <div
+        {/* ... (Login and Signup forms content using handleLoginSubmit/handleSignupSubmit) ... */}
+         <div
           className={`w-[500px] bg-white p-8 rounded-2xl shadow-lg mt-2.5 ${
             isLogin ? "h-[360px]" : "h-[530px]"
           }`}

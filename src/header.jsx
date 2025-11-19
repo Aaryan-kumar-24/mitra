@@ -1,12 +1,19 @@
+// src/header.jsx
 import logo from "./image/logo.jpg";
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect, useContext } from "react"; // Added useContext
+import { Link, useLocation, useNavigate } from "react-router-dom"; // Added useNavigate
+import { AuthContext } from "./AuthContext"; // Import your authentication context
 
 function Header() {
   const [open, setOpen] = useState(false);
-  const location = useLocation(); // Get current path
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // 🔑 Access user context data
+  const { user, logout, isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
+    // Animation logic remains the same
     if (open) {
       const timer = setTimeout(() => {
         document.querySelectorAll(".profile-card").forEach((card, i) => {
@@ -22,6 +29,22 @@ function Header() {
     }
   }, [open]);
 
+  // Handle Account/Profile click dynamically
+  const handleAccountClick = () => {
+    if (isAuthenticated) {
+      setOpen(true); // Open the profile drawer if logged in
+    } else {
+      navigate("/Login_signup"); // Redirect to login/signup page
+    }
+  };
+
+  // Handle logout action
+  const handleLogout = () => {
+    logout(); // Call the logout function from context
+    setOpen(false);
+    navigate("/Login_signup");
+  };
+
   const getButtonClasses = (path) =>
     `flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
       location.pathname === path
@@ -29,136 +52,95 @@ function Header() {
         : "text-sky-800 hover:text-white hover:bg-sky-500 hover:shadow-lg"
     }`;
 
+  // Helper component for profile details
+  const ProfileCard = ({ iconClass, label, value }) => (
+    <div className="profile-card">
+      <i className={`bi ${iconClass}`}></i>
+      <div className="info-text">
+        <div className="info-label">{label}</div>
+        {/* Display 'N/A' if value is missing */}
+        <div className="info-value">{value || 'N/A'}</div> 
+      </div>
+    </div>
+  );
+
   return (
     <>
+      {/* --- Main Navigation Bar --- */}
       <div className="flex items-center justify-evenly flex-wrap gap-4 bg-white p-1 shadow">
         <div className="logo-container flex items-center gap-2">
-          <img src={logo} className="Logo w-12 h-12 rounded-full" />
+          <img src={logo} className="Logo w-12 h-12 rounded-full" alt="Logo" />
           <div className="logo-title text-sky-700">Aryavarta Mitra</div>
         </div>
 
-        <Link to={"/"}>
-          <button className={getButtonClasses("/")}>
-            <i className="fas fa-home"></i> Home
-          </button>
-        </Link>
+        <Link to={"/"}><button className={getButtonClasses("/")}><i className="fas fa-home"></i> Home</button></Link>
+        <Link to={"/pg"}><button className={getButtonClasses("/pg")}><i className="fas fa-building"></i> PG Nearby</button></Link>
+        <Link to={"/shops"}><button className={getButtonClasses("/shops")}><i className="fas fa-store"></i> Shops Nearby</button></Link>
+        <Link to={"/Skills"}><button className={getButtonClasses("/Skills")}><i className="fas fa-lightbulb"></i> Skills</button></Link>
+        <Link to={"/Notes"}><button className={getButtonClasses("/Notes")}><i className="fas fa-book"></i> Notes</button></Link>
 
-        <Link to={"/pg"}>
-          <button className={getButtonClasses("/pg")}>
-            <i className="fas fa-building"></i> PG Nearby
-          </button>
-        </Link>
+<Link to={"/chat"}>
+  <button className={getButtonClasses("/chat")}>
+    <i className="fas fa-comments"></i> Chat
+  </button>
+</Link>
 
-        <Link to={"/shops"}>
-          <button className={getButtonClasses("/shops")}>
-            <i className="fas fa-store"></i> Shops Nearby
-          </button>
-        </Link>
+        {/* Dynamic Account/Profile Button */}
 
-        <Link to={"/Skills"}>
-          <button className={getButtonClasses("/Skills")}>
-            <i className="fas fa-lightbulb"></i> Skills
-          </button>
-        </Link>
-
-        <Link to={"/Notes"}>
-          <button className={getButtonClasses("/Notes")}>
-            <i className="fas fa-book"></i> Notes
-          </button>
-        </Link>
-
-        <button
-          onClick={() => setOpen(true)}
-          className={getButtonClasses("/account")}
-        >
-          <i className="fas fa-user"></i> Account
+        <button onClick={handleAccountClick} className={getButtonClasses("/account")}>
+          <i className="fas fa-user"></i> 
+          {/* Show 'Profile' if authenticated, otherwise 'Account' */}
+          {isAuthenticated ? "Profile" : "Account"} 
         </button>
       </div>
 
       <div>
-        {/* Overlay */}
-        {open && (
-          <div
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
-            onClick={() => setOpen(false)}
-          />
-        )}
+        {/* --- Offcanvas Profile Drawer (Only renders if authenticated) --- */}
+        {isAuthenticated && (
+          <>
+            {/* Overlay */}
+            {open && (<div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40" onClick={() => setOpen(false)}/>)}
 
-        {/* Offcanvas Panel */}
-        <div
-          className={`fixed top-0 right-0 h-full w-[370px] bg-white/70 backdrop-blur-lg text-green-900 border-l-4 shadow-xl rounded-l-xl z-50 transform transition-transform duration-500 ${
-            open ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3">
-            <h2 className="text-lg font-semibold flex ml-[120px] items-center gap-2">
-              <i className="bi bi-person-badge-fill"></i> Your Profile
-            </h2>
-            <button
-              onClick={() => setOpen(false)}
-              className="text-gray-700 hover:text-gray-900 text-xl"
+            {/* Offcanvas Panel */}
+            <div
+              className={`fixed top-0 right-0 h-full w-[370px] bg-white/70 backdrop-blur-lg text-green-900 border-l-4 shadow-xl rounded-l-xl z-50 transform transition-transform duration-500 ${
+                open ? "translate-x-0" : "translate-x-full"
+              }`}
             >
-              ✕
-            </button>
-          </div>
+              {/* Header */}
+              <div className="flex items-center justify-between px-4 py-3">
+                <h2 className="text-lg font-semibold flex ml-[120px] items-center gap-2">
+                  <i className="bi bi-person-badge-fill"></i> Your Profile
+                </h2>
+                <button onClick={() => setOpen(false)} className="text-gray-700 hover:text-gray-900 text-xl">✕</button>
+              </div>
 
-          {/* Body */}
-          <div className="p-6 space-y-4 overflow-y-auto h-full">
-            {/* Profile Cards */}
-            <div className="profile-card">
-              <i className="bi bi-person-fill icon-green"></i>
-              <div className="info-text">
-                <div className="info-label">Username</div>
-                <div className="info-value">Aryan Kumar</div>
+              {/* Body: Dynamically render User Details */}
+              <div className="p-6 space-y-4 overflow-y-auto h-full">
+                {/* We use optional chaining (user?.name) to safely access properties, 
+                  as the 'user' object might be null while fetching or before login.
+                */}
+                <ProfileCard iconClass="bi-person-fill icon-green" label="Full Name" value={user?.name}/>
+                <ProfileCard iconClass="bi-envelope-fill icon-blue" label="Email" value={user?.email}/>
+                <ProfileCard iconClass="bi-telephone-fill icon-orange" label="Phone" value={user?.phone}/>
+                <ProfileCard iconClass="bi-house-door-fill icon-purple" label="College" value={user?.college}/>
+                <ProfileCard iconClass="bi-cpu-fill icon-red" label="Branch" value={user?.branch}/>
+                <ProfileCard iconClass="bi-calendar-date-fill icon-green" label="Year" value={user?.year}/>
+
+                {/* Logout Button */}
+                <div className="text-center mt-6">
+                  {/* Updated button to call handleLogout function */}
+                  <button onClick={handleLogout} className="logout-btn flex items-center justify-center gap-2">
+                    <i className="bi bi-box-arrow-right"></i> Logout
+                  </button>
+                </div>
               </div>
             </div>
-
-            <div className="profile-card">
-              <i className="bi bi-envelope-fill icon-blue"></i>
-              <div className="info-text">
-                <div className="info-label">Email</div>
-                <div className="info-value">aryan@example.com</div>
-              </div>
-            </div>
-
-            <div className="profile-card">
-              <i className="bi bi-telephone-fill icon-orange"></i>
-              <div className="info-text">
-                <div className="info-label">Phone</div>
-                <div className="info-value">+91 9876543210</div>
-              </div>
-            </div>
-
-            <div className="profile-card">
-              <i className="bi bi-person-vcard-fill icon-purple"></i>
-              <div className="info-text">
-                <div className="info-label">Role</div>
-                <div className="info-value">Student</div>
-              </div>
-            </div>
-
-            <div className="profile-card">
-              <i className="bi bi-shield-lock-fill icon-red"></i>
-              <div className="info-text">
-                <div className="info-label">Access Level</div>
-                <div className="info-value">Student</div>
-              </div>
-            </div>
-
-            {/* Logout Button */}
-            <div className="text-center mt-6">
-              <Link to={"/Login_signup"}>
-                <button className="logout-btn flex items-center justify-center gap-2">
-                  <i className="bi bi-box-arrow-right"></i> Logout
-                </button>
-              </Link>
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
 
-      {/* Extra CSS for animations */}
+      {/* --- Custom CSS for animations and styles (unchanged) --- */}
       <style>{`
         .profile-card { display: flex; align-items: center; background: white; border-radius: 12px; margin-bottom: 15px; padding: 1rem; box-shadow: 0 4px 12px rgba(188, 188, 188, 0.78); transform: translateY(20px); opacity: 0; transition: transform 0.4s ease, box-shadow 0.4s ease; }
         .profile-card.visible { animation: fadeSlideIn 0.6s ease forwards; background-color: rgba(244, 238, 238, 0.32); }
