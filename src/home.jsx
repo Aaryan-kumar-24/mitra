@@ -1,4 +1,5 @@
-// src/home.jsx (or whatever your file is named)
+import {AIChatOffcanvas} from "./AIChatOffcanvas";
+
 
 import { useEffect, useState } from "react";
 import { Header } from "./header";
@@ -9,6 +10,16 @@ import fab from "../src/image/fab1.jpg";
 import shree from "../src/image/shree.jpg";
 import f1 from "../src/image/f1.jpg";
 import f2 from "../src/image/f2.jpg";
+import pg from "../src/image/pg.jpg";
+import notes from "../src/image/notes.jpg";
+import project from "../src/image/project.jpg";
+import sell from "../src/image/sell.jpg";
+import shops from "../src/image/shops.jpg";
+import skills from "../src/image/skills.jpg";
+import chatbot from "../src/image/chatbot.jpg";
+import events from "../src/image/collegeevents.avif";
+
+import cartoon from "../src/image/cartoon.png";
 
 
 // ---------------- 1. Home (Parent Component) ----------------
@@ -27,6 +38,9 @@ export function Home() {
       <StudentProjectsSlider />
       <StudentMarket /> 
       <SellItemModal /> 
+            <AIChatOffcanvas />
+
+
       <Footer /> 
     </>
   );
@@ -94,53 +108,99 @@ export function Corosel() {
 
 // ---------------- 3. Features ----------------
 export function Features() {
-  const features = [
-    { title: "🏠 PG Finder", description: "Explore verified PGs with food, rent, rooms, and facilities near your college.", image: shree, link: "/pg" },
-    { title: "📘 Notes Hub", description: "Get notes by branch, semester, and subject. Search, download, or share notes easily.", image: shree, link: "/Notes" },
-    { title: "🛍️ Nearby Shops", description: "Find shops near your college with location, timings, distance, and contact info.", image: shree, link: "/shops" },
-    { title: "💡 Skill Learning", description: "Learn top-demand skills with roadmaps, resources, and career guidance.", image: shree, link: "/Skills" },
-    { title: "🚀 Projects & Collaboration", description: "Showcase your projects or find collaborators for new ideas and innovations.", image: shree, link: "/projects" },
-    { title: "🎯 College Events", description: "Stay updated with hackathons, ideathons, workshops, and campus events.", image: shree, link: "/events" },
-    { title: "🛒 Marketplace", description: "Buy or sell used items like books, electronics, or notes – all within your campus.", image: shree, link: "/marketplace" },
-    { title: "📢 Requests & Help", description: "Request urgent notes, items, or help from other students instantly.", image: shree, link: "/requests" },
-  ];
+const features = [
+  { 
+    title: "🏠 PG Finder", 
+    description: "Explore verified PGs with food, rent, rooms, and facilities near your college.", 
+    image: pg, 
+    link: "/pg" 
+  },
+  { 
+    title: "📘 Notes Hub", 
+    description: "Get notes by branch, semester, and subject. Search, download, or share notes easily.", 
+    image: notes, 
+    link: "/Notes" 
+  },
+  { 
+    title: "🛍️ Nearby Shops", 
+    description: "Find shops near your college with location, timings, distance, and contact info.", 
+    image: shops, 
+    link: "/shops" 
+  },
+  { 
+    title: "💡 Skill Learning", 
+    description: "Learn top-demand skills with roadmaps, resources, and career guidance.", 
+    image: skills, 
+    link: "/Skills" 
+  },
+  { 
+    title: "🚀 Projects Showcase", 
+    description: "Showcase your projects or find collaborators for new ideas and innovations.", 
+    image: project, 
+    link: "/projects" 
+  },
+  { 
+    title: "🎯 College Events", 
+    description: "Stay updated with hackathons, ideathons, workshops, and campus events.", 
+    image: events, 
+    link: "/events" 
+  },
+  { 
+    title: "🛒 Marketplace", 
+    description: "Buy or sell used items like books, electronics, or notes – all within your campus.", 
+    image: sell, 
+    link: "/marketplace" 
+  },
+  { 
+    title: "🤖 Chatbot & Help", 
+    description: "Ask doubts, request help, or get quick answers powered by smart AI assistance.", 
+    image: chatbot, 
+    link: "/chatbot" 
+  }
+];
+
 
   return (
-    <section className="py-12 bg-gray-50">
-      <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">
-        <i className="fas fa-users mr-10"></i> Features We Provide
-      </h1>
-      <div className="container mx-auto px-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12">
-        {features.map((f, i) => (
-          <Link
-            to={f.link}
-            key={i}
-            className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transform hover:-translate-y-3 transition duration-300"
-          >
-            {/* Title attached at top */}
-            <div className="absolute top-0 left-0 w-full p-2 text-left">
-              <h2 className="text-xl font-bold text-white drop-shadow-lg">
-                {f.title}
-              </h2>
-            </div>
+<section className="py-12 bg-gray-50">
+  <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">
+    <i className="fas fa-users mr-10"></i> Features We Provide
+  </h1>
 
-            {/* Image */}
-            <img
-              src={f.image}
-              alt={f.title}
-              className="w-full h-72 bg-red-200 object-cover"
-            />
+  <div className="container mx-auto px-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+    {features.map((f, i) => (
+      <Link
+        to={f.link}
+        key={i}
+        className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transform hover:-translate-y-3 transition duration-300"
+      >
+        {/* Title at top */}
+        <div className="absolute top-0 left-0 w-full p-2 text-left z-20">
+          <h2 className="text-xl font-bold text-white drop-shadow-lg">
+            {f.title}
+          </h2>
+        </div>
 
-            {/* Glass effect overlay (bottom content) */}
-            <div className="absolute bottom-0 left-0 w-full p-6">
-              <p className="text-sm md:text-base text-white drop-shadow-md">
-                {f.description}
-              </p>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </section>
+        {/* Image */}
+        <img
+          src={f.image}
+          alt={f.title}
+          className="w-full h-72 object-cover"
+        />
+
+        {/* 🔥 Dark overlay added here */}
+        <div className="absolute inset-0 bg-black bg-opacity-20 z-10"></div>
+
+        {/* Bottom description */}
+        <div className="absolute bottom-0 left-0 w-full p-6 z-20">
+          <p className="text-sm md:text-base text-white drop-shadow-md">
+            {f.description}
+          </p>
+        </div>
+      </Link>
+    ))}
+  </div>
+</section>
+
   );
 }
 
@@ -209,6 +269,11 @@ export function StudentProjectsSlider() { // Added 'export'
       <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
         🎓 Student Projects Showcase
       </h2>
+<img 
+  src={cartoon}
+  alt="cartoon"
+  className="absolute top-[1300px] left-[48px] w-[600px] h-[600px] "
+/>
 
       <div className="relative w-full flex justify-center items-center">
         {/* Upload Button */}
@@ -539,98 +604,98 @@ export const Footer = () => { // Changed from 'const' to 'export const'
 };
 
 // ---------------- 7. SellItemModal ----------------
-export function SellItemModal() { // Changed from 'function' to 'export function'
-  const [showModal, setShowModal] = useState(false);
+  export function SellItemModal() { // Changed from 'function' to 'export function'
+    const [showModal, setShowModal] = useState(false);
 
-  // Input States
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [yearUsed, setYearUsed] = useState("");
-  const [quality, setQuality] = useState("");
-  const [image, setImage] = useState(null);
-  const [phone, setPhone] = useState("");
+    // Input States
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState("");
+    const [yearUsed, setYearUsed] = useState("");
+    const [quality, setQuality] = useState("");
+    const [image, setImage] = useState(null);
+    const [phone, setPhone] = useState("");
 
-  // Handle Submit
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    // Handle Submit
+    const handleSubmit = async (e) => {
+      e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("price", price);
-    formData.append("yearUsed", yearUsed);
-    formData.append("quality", quality);
-    formData.append("image", image);
-    formData.append("phone", phone);
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("yearUsed", yearUsed);
+      formData.append("quality", quality);
+      formData.append("image", image);
+      formData.append("phone", phone);
 
-    try {
-      const res = await fetch("http://localhost:8000/add-sell-item", {
-        method: "POST",
-        body: formData,
-      });
+      try {
+        const res = await fetch("http://localhost:8000/add-sell-item", {
+          method: "POST",
+          body: formData,
+        });
 
-      if (res.ok) {
-        alert("✅ Item uploaded successfully!");
-        // Clear form states and close modal
-        setName("");
-        setPrice("");
-        setYearUsed("");
-        setQuality("");
-        setImage(null);
-        setPhone("");
-        setShowModal(false);
-        // You might need to refresh the `StudentMarket` item list here 
-        // by calling a function passed down from the parent or by refreshing the page
-      } else {
-        alert("❌ Upload failed!");
+        if (res.ok) {
+          alert("✅ Item uploaded successfully!");
+          // Clear form states and close modal
+          setName("");
+          setPrice("");
+          setYearUsed("");
+          setQuality("");
+          setImage(null);
+          setPhone("");
+          setShowModal(false);
+          // You might need to refresh the `StudentMarket` item list here 
+          // by calling a function passed down from the parent or by refreshing the page
+        } else {
+          alert("❌ Upload failed!");
+        }
+      } catch (error) {
+        console.error("Error uploading item:", error);
+        alert("❌ Something went wrong!");
       }
-    } catch (error) {
-      console.error("Error uploading item:", error);
-      alert("❌ Something went wrong!");
-    }
-  };
+    };
 
-  return (
-    <>
-      {/* Floating Add Button (Plus Emoji) */}
-      <button
-        onClick={() => setShowModal(true)}
-        className="fixed bottom-8 right-8 bg-gradient-to-r from-sky-400 to-cyan-500 text-white rounded-full shadow-2xl w-16 h-16 flex items-center justify-center text-3xl hover:scale-110 transition-all duration-300 animate-pulse"
-      >
-        ➕
-      </button>
+    return (
+      <>
+        {/* Floating Add Button (Plus Emoji) */}
+        <button
+          onClick={() => setShowModal(true)}
+          className="fixed bottom-8 right-8 bg-gradient-to-r from-sky-400 to-cyan-500 text-white rounded-full shadow-2xl w-16 h-16 flex items-center justify-center text-3xl hover:scale-110 transition-all duration-300 animate-pulse"
+        >
+          ➕
+        </button>
 
-      {/* Modal (rest of the JSX remains the same...) */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
-            {/* Close Button */}
-            <button
-              className="absolute top-4 right-4 text-sky-400 hover:text-sky-600 text-2xl font-bold transition"
-              onClick={() => setShowModal(false)}
-            >
-              ✖
-            </button>
+        {/* Modal (rest of the JSX remains the same...) */}
+        {showModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
+              {/* Close Button */}
+              <button
+                className="absolute top-4 right-4 text-sky-400 hover:text-sky-600 text-2xl font-bold transition"
+                onClick={() => setShowModal(false)}
+              >
+                ✖
+              </button>
 
-            <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
-              Sell Your Item 🛍️
-            </h3>
+              <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
+                Sell Your Item 🛍️
+              </h3>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              {/* Input fields */}
-              <input type="text" placeholder="Name of the Item" value={name} onChange={(e) => setName(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
-              <input type="number" placeholder="Price (₹)" value={price} onChange={(e) => setPrice(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
-              <input type="text" placeholder="Year Used (e.g., 2 Years)" value={yearUsed} onChange={(e) => setYearUsed(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
-              <input type="text" placeholder="Quality (Excellent, Good, Average)" value={quality} onChange={(e) => setQuality(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
-              <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white"/>
-              <input type="tel" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
-              
-              <button type="submit" className="bg-gradient-to-r from-sky-400 to-cyan-500 hover:from-sky-500 hover:to-cyan-600 text-white py-3 rounded-2xl font-semibold transition shadow-lg">Upload Item</button>
-            </form>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                {/* Input fields */}
+                <input type="text" placeholder="Name of the Item" value={name} onChange={(e) => setName(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
+                <input type="number" placeholder="Price (₹)" value={price} onChange={(e) => setPrice(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
+                <input type="text" placeholder="Year Used (e.g., 2 Years)" value={yearUsed} onChange={(e) => setYearUsed(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
+                <input type="text" placeholder="Quality (Excellent, Good, Average)" value={quality} onChange={(e) => setQuality(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
+                <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white"/>
+                <input type="tel" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
+                
+                <button type="submit" className="bg-gradient-to-r from-sky-400 to-cyan-500 hover:from-sky-500 hover:to-cyan-600 text-white py-3 rounded-2xl font-semibold transition shadow-lg">Upload Item</button>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
-    </>
-  );
-}
+        )}
+      </>
+    );
+  }
 
 // REMOVE THIS LINE: export default StudentMarket;
