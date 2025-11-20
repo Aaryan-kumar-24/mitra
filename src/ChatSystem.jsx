@@ -4,6 +4,18 @@ import { Header } from "./header";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
 
+// Color Palette & Design Constants
+const PRIMARY_COLOR = "#00bcd4"; // Main vibrant Sky Blue
+const PRIMARY_ACCENT = "#26c6da"; // Slightly darker/brighter accent
+const BACKGROUND_GRADIENT = "linear-gradient(to right bottom, #e0f7fa, #b2ebf2)"; // Soft, dynamic background
+const CARD_BG = "rgba(255, 255, 255, 0.98)";
+const CHAT_BUBBLE_MINE = PRIMARY_COLOR;
+const CHAT_BUBBLE_THEM = "#f0f7f9"; // Very light blue-gray for clean contrast
+const SHADOW_ELEGANT = "0 20px 50px rgba(0, 188, 212, 0.35), 0 5px 15px rgba(0, 0, 0, 0.1)";
+// New Divider Gradient
+const DIVIDER_GRADIENT = `linear-gradient(to bottom, ${PRIMARY_ACCENT}30, ${PRIMARY_COLOR}80, ${PRIMARY_ACCENT}30)`;
+
+
 const socket = io("http://localhost:8000", { autoConnect: true });
 
 export default function ChatSystem() {
@@ -19,12 +31,14 @@ export default function ChatSystem() {
   let typingTimeout = useRef(null);
   let searchTimeout = useRef(null);
 
-  // ----------------------- LOAD CHAT USERS -----------------------
+  // --- LOGIC FUNCTIONS (Unchanged for stability) ---
+
   useEffect(() => {
     if (user) loadChatUsers();
   }, [user]);
 
   const loadChatUsers = async () => {
+    // ... (unchanged logic)
     try {
       const res = await axios.get(
         `http://localhost:8000/chat-users/${user._id}`,
@@ -62,8 +76,8 @@ export default function ChatSystem() {
     }
   };
 
-  // ----------------------- SOCKET EVENTS -----------------------
   useEffect(() => {
+    // ... (unchanged logic)
     if (!user) return;
 
     socket.emit("addUser", user._id);
@@ -102,13 +116,12 @@ export default function ChatSystem() {
     };
   }, [selectedUser, user]);
 
-  // ----------------------- AUTO SCROLL -----------------------
   useEffect(() => {
     if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
   }, [messages, typing]);
 
-  // ----------------------- SEARCH USER -----------------------
   const handleSearch = async (phone) => {
+    // ... (unchanged logic)
     if (!phone) return;
 
     try {
@@ -127,12 +140,10 @@ export default function ChatSystem() {
 
       selectUserFromList(foundUser);
     } catch {
-      // optional: remove alert for smoother UX
       console.log("User not found");
     }
   };
 
-  // Debounce search for typing
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearch(value);
@@ -140,11 +151,11 @@ export default function ChatSystem() {
     clearTimeout(searchTimeout.current);
     searchTimeout.current = setTimeout(() => {
       if (value) handleSearch(value);
-    }, 500); // wait 500ms after typing stops
+    }, 500);
   };
 
-  // ----------------------- LOAD MESSAGES -----------------------
   const loadMessages = async (receiverId) => {
+    // ... (unchanged logic)
     try {
       const res = await axios.get(
         `http://localhost:8000/messages/${user._id}/${receiverId}?sort=asc`,
@@ -156,8 +167,8 @@ export default function ChatSystem() {
     }
   };
 
-  // ----------------------- SELECT USER -----------------------
   const selectUserFromList = async (u) => {
+    // ... (unchanged logic)
     setSelectedUser(u);
     await loadMessages(u._id);
 
@@ -177,8 +188,8 @@ export default function ChatSystem() {
     );
   };
 
-  // ----------------------- SEND MESSAGE -----------------------
   const sendMessage = async () => {
+    // ... (unchanged logic)
     if (!sendMsg.trim() || !selectedUser) return;
 
     const msg = {
@@ -199,8 +210,8 @@ export default function ChatSystem() {
     setSendMsg("");
   };
 
-  // ----------------------- TYPING -----------------------
   const handleTyping = (e) => {
+    // ... (unchanged logic)
     setSendMsg(e.target.value);
     socket.emit("typing", {
       senderId: user._id,
@@ -218,201 +229,433 @@ export default function ChatSystem() {
     }, 1000);
   };
 
-  // ----------------------- RENDER -----------------------
+  // --- RENDER ---
+
   if (!user)
     return (
-      <div style={{ padding: 24 }}>
-        <h3>Please login to use chat</h3>
-        <a href="/Login_signup">Go to Login</a>
+      <div style={{ padding: 50, textAlign: "center", background: BACKGROUND_GRADIENT, minHeight: "100vh" }}>
+        <h3 style={{ color: PRIMARY_COLOR }}>Please login to use chat</h3>
+        <a href="/Login_signup" style={{ color: PRIMARY_COLOR, textDecoration: "underline" }}>
+          Go to Login
+        </a>
       </div>
     );
 
   return (
-    <div>
+    <div
+      style={{
+        background: BACKGROUND_GRADIENT,
+        minHeight: "100vh",
+        padding: "0px 0 100px 0",
+        fontFamily: "Poppins, sans-serif",
+        position: "relative",
+      }}
+    >
       <Header />
+      {/* Animated Floating Background Elements */}
+      <div className="sky-elements-container">
+          <div className="sky-element" style={{ top: '10%', left: '10%', width: 50, height: 50, opacity: 0.3 }}></div>
+          <div className="sky-element" style={{ top: '50%', right: '5%', width: 80, height: 80, opacity: 0.2 }}></div>
+          <div className="sky-element" style={{ bottom: '20%', left: '25%', width: 60, height: 60, opacity: 0.4 }}></div>
+      </div>
+
+      {/* Main Chat Container (Floating Card) */}
       <div
         style={{
-          maxWidth: 1150,
-          margin: "30px auto",
-          display: "grid",
-          gridTemplateColumns: "0.9fr 2fr",
-          gap: 20,
-          fontFamily: "Poppins",
+          maxWidth: 1300,
+          height: "85vh",
+          margin: "20px auto",
+          borderRadius: 30,
+          boxShadow: SHADOW_ELEGANT,
+          overflow: "hidden",
+          display: "flex",
+          position: "relative",
+          zIndex: 10,
+          background: CARD_BG,
+          animation: "scaleIn 0.5s ease-out",
         }}
       >
-        {/* LEFT PANEL */}
+        {/* LEFT PANEL: User Sidebar */}
         <div
           style={{
-            background: "#fff",
-            padding: 16,
-            borderRadius: 14,
-            boxShadow: "0 8px 25px rgba(0,0,0,0.08)",
-            height: "85vh",
+            width: "350px", // Fixed width for a more controlled sidebar
+            background: CARD_BG,
+            padding: 25,
+            // Removed borderRight here, the divider will take over
             display: "flex",
             flexDirection: "column",
+            position: 'relative', // Needed for relative positioning of the divider
           }}
         >
-          <h2 style={{ marginBottom: 12, fontWeight: 600 }}>Messages</h2>
-
-          <div style={{ display: "flex", gap: 8 }}>
-            <input
-              value={search}
-              onChange={handleSearchChange} // <-- live search
-              placeholder="Search by phone..."
+          {/* *** Vertical Gradient Divider *** */}
+          <div 
               style={{
-                flex: 1,
-                padding: 10,
-                borderRadius: 12,
-                border: "1px solid #ddd",
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  width: '3px', // Thickness of the divider
+                  height: '100%',
+                  background: DIVIDER_GRADIENT, // The beautiful gradient
+                  boxShadow: `1px 0 8px ${PRIMARY_COLOR}30`, // Subtle shadow for depth
+                  zIndex: 1, // Ensure it's above the sidebar content if padding was an issue
               }}
-            />
-          </div>
+          ></div>
+          {/* *** End Divider *** */}
+          
+          <h2 style={{ marginBottom: 25, fontWeight: 700, color: PRIMARY_COLOR, fontSize: 28 }}>
+            <span role="img" aria-label="chat">💬</span> Inbox
+          </h2>
 
-          <div style={{ marginTop: 20, overflowY: "auto" }}>
+          {/* Search Input */}
+          <input
+            value={search}
+            onChange={handleSearchChange}
+            placeholder="Search by phone..."
+            style={{
+              padding: 12,
+              borderRadius: 25,
+              border: `2px solid ${PRIMARY_COLOR}40`,
+              marginBottom: 20,
+              fontSize: 15,
+              transition: "border 0.3s ease, box-shadow 0.3s ease",
+            }}
+            onFocus={(e) => (e.target.style.boxShadow = `0 0 0 4px ${PRIMARY_COLOR}30`)}
+            onBlur={(e) => (e.target.style.boxShadow = "none")}
+          />
+
+          {/* User List Scrollable Area */}
+          <div style={{ overflowY: "auto", flex: 1 }}>
             {chatUsers.map((u) => (
               <div
                 key={u._id}
                 onClick={() => selectUserFromList(u)}
+                className="user-list-item"
                 style={{
-                  padding: 12,
-                  marginBottom: 12,
-                  background:
-                    selectedUser?._id === u._id ? "#e8f0ff" : "#f7faff",
-                  borderRadius: 12,
+                  padding: "18px 15px",
+                  marginBottom: 10,
+                  background: selectedUser?._id === u._id ? PRIMARY_ACCENT + "15" : CARD_BG,
+                  borderRadius: 15,
                   cursor: "pointer",
-                  border: "1px solid #e5e7eb",
+                  borderLeft: selectedUser?._id === u._id ? `4px solid ${PRIMARY_COLOR}` : '4px solid transparent',
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  transition: "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                  boxShadow: selectedUser?._id === u._id ? "0 4px 15px rgba(0, 188, 212, 0.1)" : "0 1px 5px rgba(0,0,0,0.05)",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  {u.hasUnread && (
+                <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
+                  <div
+                    style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: "50%",
+                      background: PRIMARY_ACCENT,
+                      color: "white",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: 600,
+                      fontSize: 20,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {u.name[0].toUpperCase()}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
+                    <strong style={{ color: selectedUser?._id === u._id ? PRIMARY_COLOR : "#333", fontSize: 16 }}>
+                      {u.name}
+                    </strong>
+                    <span style={{ fontSize: 12, color: "#777", opacity: 0.8 }}>{u.phone}</span>
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 5 }}>
+                    {u.hasUnread && (
                     <span
+                      className="unread-indicator"
                       style={{
-                        width: 10,
-                        height: 10,
-                        background: "green",
+                        width: 10, height: 10,
+                        background: "#FF5722", // Orange for attention
                         borderRadius: "50%",
-                        display: "inline-block",
+                        display: "block",
+                        animation: "flash 1.5s infinite",
                       }}
                     ></span>
                   )}
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    <strong>{u.name}</strong>
-                    <span style={{ fontSize: 12, color: "#555" }}>{u.phone}</span>
+                  <div style={{ fontSize: 11, color: "#999" }}>
+                    {u.lastMessageTime
+                      ? new Date(u.lastMessageTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                      : "-"}
                   </div>
-                </div>
-                <div style={{ fontSize: 12, color: "#999" }}>
-                  {u.lastMessageTime
-                    ? new Date(u.lastMessageTime).toLocaleTimeString()
-                    : "-"}
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* RIGHT PANEL */}
+        {/* RIGHT PANEL: Chat Window */}
         <div
           style={{
-            background: "#fff",
-            padding: 16,
-            borderRadius: 14,
-            boxShadow: "0 8px 25px rgba(0,0,0,0.08)",
-            height: "85vh",
+            flex: 1,
+            padding: 25,
             display: "flex",
             flexDirection: "column",
+            background: CHAT_BUBBLE_THEM + "30", // Light textured background for the chat area
           }}
         >
-          <h2
+          {/* Chat Header */}
+          <div
             style={{
-              fontWeight: 600,
-              borderBottom: "1px solid #eee",
-              paddingBottom: 8,
+              paddingBottom: 15,
+              borderBottom: `1px solid ${PRIMARY_COLOR}30`,
+              marginBottom: 15,
+              display: "flex",
+              alignItems: "center",
+              gap: 15,
             }}
           >
-            {selectedUser ? selectedUser.name : "Select a user"}
-          </h2>
+            {selectedUser ? (
+                <>
+                    <div
+                        style={{
+                            width: 55, height: 55,
+                            borderRadius: "50%",
+                            background: PRIMARY_COLOR,
+                            color: "white",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            fontWeight: 600, fontSize: 24,
+                            boxShadow: "0 4px 12px rgba(0, 188, 212, 0.4)",
+                            animation: "floatUp 1s ease-in-out infinite alternate"
+                        }}
+                    >
+                        {selectedUser.name[0].toUpperCase()}
+                    </div>
+                    <h2 style={{ fontWeight: 700, color: PRIMARY_COLOR, fontSize: 26 }}>
+                        {selectedUser.name}
+                    </h2>
+                </>
+            ) : (
+                <h2 style={{ fontWeight: 500, color: "#666", fontSize: 24 }}>
+                    <span role="img" aria-label="wave">👋</span> Select a User to Begin Conversation
+                </h2>
+            )}
+          </div>
 
+          {/* Messages Container */}
           <div
             ref={chatRef}
             style={{
               flex: 1,
-              padding: 15,
+              padding: 20,
               overflowY: "auto",
-              background: "#f4f7fb",
-              borderRadius: 12,
-              marginTop: 10,
+              background: "transparent",
+              borderRadius: 20,
+              marginBottom: 20,
             }}
           >
-            {messages.map((msg) => {
+            {messages.map((msg, index) => {
               const mine = msg.senderId === user._id;
               return (
                 <div
-                  key={msg.timestamp}
+                  key={msg.timestamp + index}
                   style={{
                     display: "flex",
                     justifyContent: mine ? "flex-end" : "flex-start",
-                    marginBottom: 12,
+                    marginBottom: 15,
+                    animation: `messageSlideIn 0.3s ease-out`,
                   }}
                 >
                   <div
                     style={{
-                      background: mine ? "#d1e8ff" : "#d9ffd9",
-                      padding: "10px 14px",
+                      background: mine ? CHAT_BUBBLE_MINE : CHAT_BUBBLE_THEM,
+                      color: mine ? "white" : "#333",
+                      padding: "14px 20px",
                       borderRadius: mine
-                        ? "14px 14px 4px 14px"
-                        : "14px 14px 14px 4px",
+                        ? "25px 25px 5px 25px" // Curvy corners
+                        : "25px 25px 25px 5px",
                       maxWidth: "65%",
-                      fontSize: 15,
-                      lineHeight: "20px",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                      fontSize: 16,
+                      lineHeight: "24px",
+                      boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
                       position: "relative",
-                      transition: "all 0.3s ease",
+                      transformOrigin: mine ? 'right bottom' : 'left bottom',
+                      animation: "popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
                     }}
                   >
                     {msg.message}
-                    <div style={{ fontSize: 11, marginTop: 4, color: "#555" }}>
-                      {new Date(msg.timestamp).toLocaleTimeString()}
+                    <div
+                      style={{
+                        fontSize: 11,
+                        marginTop: 8,
+                        color: mine ? "rgba(255, 255, 255, 0.7)" : "#888",
+                        textAlign: mine ? "right" : "left",
+                      }}
+                    >
+                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                   </div>
                 </div>
               );
             })}
-            {typing && <div style={{ color: "#555", fontSize: 13 }}>Typing...</div>}
+            {typing && (
+              <div
+                style={{
+                  color: PRIMARY_COLOR,
+                  fontSize: 15,
+                  fontWeight: 500,
+                  animation: "fadePulse 1.5s infinite",
+                  paddingLeft: 10,
+                }}
+              >
+                <span className="typing-bubble">
+                  {selectedUser.name} is typing<span className="dot-flashing">.</span>
+                </span>
+              </div>
+            )}
           </div>
 
-          <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+          {/* Message Input Area */}
+          <div style={{ display: "flex", gap: 10 }}>
             <input
               value={sendMsg}
               onChange={handleTyping}
-              placeholder="Type message..."
+              placeholder={selectedUser ? "Type your message..." : "Select a user first"}
+              disabled={!selectedUser}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               style={{
                 flex: 1,
-                padding: 12,
-                borderRadius: 12,
-                border: "1px solid #ddd",
-                fontSize: 15,
+                padding: 18,
+                borderRadius: 30,
+                border: `2px solid ${PRIMARY_COLOR}40`,
+                fontSize: 17,
+                transition: "all 0.3s ease",
               }}
+              onFocus={(e) => (e.target.style.boxShadow = `0 0 0 4px ${PRIMARY_COLOR}30`)}
+              onBlur={(e) => (e.target.style.boxShadow = "none")}
             />
             <button
               onClick={sendMessage}
+              disabled={!selectedUser || !sendMsg.trim()}
               style={{
-                padding: "12px 16px",
-                background: "#0077ff",
+                padding: "10px 30px",
+                background: PRIMARY_COLOR,
                 color: "white",
-                borderRadius: 12,
+                borderRadius: 30,
                 border: "none",
-                fontWeight: 600,
+                fontWeight: 700,
+                fontSize: 18,
+                cursor: selectedUser && sendMsg.trim() ? "pointer" : "not-allowed",
+                opacity: selectedUser && sendMsg.trim() ? 1 : 0.4,
+                transition: "all 0.3s ease",
+                boxShadow: "0 4px 15px rgba(0, 188, 212, 0.4)",
+              }}
+              onMouseOver={(e) => {
+                if (selectedUser && sendMsg.trim()) e.currentTarget.style.backgroundColor = PRIMARY_ACCENT;
+              }}
+              onMouseOut={(e) => {
+                if (selectedUser && sendMsg.trim()) e.currentTarget.style.backgroundColor = PRIMARY_COLOR;
               }}
             >
+              <span role="img" aria-label="send">
+                <i class="fa-solid fa-paper-plane"></i>
+              </span>{" "}
               Send
             </button>
           </div>
         </div>
       </div>
+      
+      {/* Keyframes and Global Styles */}
+      <style>
+        {`
+          @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+          }
+          @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+          }
+          @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+          }
+          @keyframes floatUp {
+              0% { transform: translateY(0px); box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4); }
+              100% { transform: translateY(-5px); box-shadow: 0 8px 18px rgba(0, 188, 212, 0.6); }
+          }
+          @keyframes moveCloud {
+              0% { transform: translate(0, 0); }
+              100% { transform: translate(100px, 50px); }
+          }
+          .sky-elements-container {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              overflow: hidden;
+              pointer-events: none;
+          }
+          .sky-element {
+              position: absolute;
+              background: rgba(255, 255, 255, 0.7);
+              border-radius: 50%;
+              filter: blur(20px);
+              animation: moveCloud 20s infinite alternate;
+          }
+          .user-list-item:hover {
+              transform: translateX(5px);
+              background: ${PRIMARY_COLOR}05 !important;
+          }
+          .typing-bubble {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 15px;
+            background: #e0f7fa;
+            border-radius: 15px;
+            font-style: italic;
+          }
+          .dot-flashing {
+            position: relative;
+            width: 4px;
+            height: 4px;
+            border-radius: 5px;
+            background-color: ${PRIMARY_COLOR};
+            color: ${PRIMARY_COLOR};
+            display: inline-block;
+            margin-left: 5px;
+            animation: dotFlashing 1s infinite alternate;
+            animation-delay: 0s;
+          }
+          .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            width: 4px;
+            height: 4px;
+            border-radius: 5px;
+            background-color: ${PRIMARY_COLOR};
+            color: ${PRIMARY_COLOR};
+          }
+          .dot-flashing::before {
+            left: -6px;
+            animation: dotFlashing 1s infinite alternate;
+            animation-delay: 0.2s;
+          }
+          .dot-flashing::after {
+            left: 6px;
+            animation: dotFlashing 1s infinite alternate;
+            animation-delay: 0.4s;
+          }
+          @keyframes dotFlashing {
+            0% { background-color: ${PRIMARY_COLOR}; }
+            50%, 100% { background-color: ${PRIMARY_COLOR}50; }
+          }
+        `}
+      </style>
     </div>
   );
 }
