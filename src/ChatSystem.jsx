@@ -3,6 +3,10 @@ import io from "socket.io-client";
 import { Header } from "./header";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
+import EmojiPicker from "emoji-picker-react";
+import { UNSAFE_WithHydrateFallbackProps } from "react-router-dom";
+
+
 
 // Color Palette & Design Constants
 const PRIMARY_COLOR = "#00bcd4"; // Main vibrant Sky Blue
@@ -25,6 +29,10 @@ const socket = io("http://localhost:8000", { autoConnect: true });
 
 export default function ChatSystem() {
   const { user } = useContext(AuthContext);
+  
+  const fileInputRef = useRef(null);
+
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const [search, setSearch] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
@@ -35,6 +43,14 @@ export default function ChatSystem() {
   const chatRef = useRef();
   let typingTimeout = useRef(null);
   let searchTimeout = useRef(null);
+// Get token from AuthContext
+const { token } = useContext(AuthContext);
+
+// Create room ID based on two users
+const room = selectedUser
+  ? [user?._id, selectedUser?._id].sort().join("-")
+  : null;
+
 
   // --- LOGIC FUNCTIONS (Unchanged for stability) ---
 
@@ -228,6 +244,37 @@ export default function ChatSystem() {
   };
 
   // --- RENDER ---
+const handleFileUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("senderId", user._id);
+  formData.append("receiverId", selectedUser._id);
+
+  try {
+    const res = await axios.post(
+      "http://localhost:8000/send-media",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    socket.emit("sendMessage", {
+      room,
+      ...res.data,
+    });
+
+    setMessages((prev) => [...prev, res.data]);
+  } catch (err) {
+    console.error("File upload error:", err);
+  }
+};
 
   if (!user)
     return (
@@ -480,57 +527,120 @@ export default function ChatSystem() {
             ref={chatRef}
             style={{
               flex: 1,
-              padding: 20,
+              padding: 1,
               overflowY: "auto",
               background: "transparent",
               borderRadius: 20,
               marginBottom: 20,
             }}
           >
-            {messages.map((msg, index) => {
-              const mine = msg.senderId === user._id;
-              return (
-                <div
-                  key={msg.timestamp + index}
-                  style={{
-                    display: "flex",
-                    justifyContent: mine ? "flex-end" : "flex-start",
-                    marginBottom: 15,
-                    animation: `messageSlideIn 0.3s ease-out`,
-                  }}
-                >
-                  <div
-                    style={{
-                      background: mine ? CHAT_BUBBLE_MINE : CHAT_BUBBLE_THEM,
-                      color: mine ? "white" : "#333",
-                      padding: "14px 20px",
-                      borderRadius: mine
-                        ? "25px 25px 5px 25px" // Curvy corners
-                        : "25px 25px 25px 5px",
-                      maxWidth: "65%",
-                      fontSize: 16,
-                      lineHeight: "24px",
-                      boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
-                      position: "relative",
-                      transformOrigin: mine ? 'right bottom' : 'left bottom',
-                      animation: "popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-                    }}
-                  >
-                    {msg.message}
-                    <div
-                      style={{
-                        fontSize: 11,
-                        marginTop: 8,
-                        color: mine ? "rgba(255, 255, 255, 0.7)" : "#888",
-                        textAlign: mine ? "right" : "left",
-                      }}
-                    >
-                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+  
+<div style={{ height: "100%", overflowY: "auto", padding: "10px" }}>
+  {Array.isArray(messages) &&
+    messages.map((msg, index) => {
+      const mine = msg.senderId === user._id;
+
+      return (
+        <div
+          key={msg.timestamp + index}
+          style={{
+            display: "flex",
+            justifyContent: mine ? "flex-end" : "flex-start",
+            marginBottom: 15,
+            flexDirection: "column",
+            alignItems: mine ? "flex-end" : "flex-start",
+          }}
+        >
+          {/* Text Message */}
+          {msg.message && (
+            <div
+              style={{
+                background: mine ? "#1ca3ec" : "#f0f8ff",
+                color: mine ? "#fff" : "#333",
+                borderRadius: mine ? "25px 25px 5px 25px" : "25px 25px 25px 5px",
+                maxWidth: "65%",
+                fontSize: 16,
+                lineHeight: "22px",
+                padding: "14px 20px",
+                boxShadow: mine
+                  ? "0 6px 8px rgba(0,176,255,0.1)"
+                  : "0 6px 8px rgba(0,0,0,0.04)",
+                wordBreak: "break-word",
+                transition: "all 0.3s ease",
+              }}
+            >
+              {msg.message}
+            </div>
+          )}
+
+          {/* Image */}
+          {msg?.mediaUrl && msg?.mediaType === "image" && (
+            <a
+              href={`http://localhost:8000${msg.mediaUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={`http://localhost:8000${msg.mediaUrl}`}
+                alt=""
+                style={{
+                  marginTop: 6,
+                  maxWidth: "200px",
+                  maxHeight: "200px",
+                  borderRadius: 12,
+                  objectFit: "cover",
+                  cursor: "pointer",
+                  transition: "0.3s",
+                }}
+              />
+            </a>
+          )}
+
+          {/* Video */}
+          {msg?.mediaUrl && msg?.mediaType === "video" && (
+            <video
+              controls
+              style={{
+                marginTop: 6,
+                maxWidth: "240px",
+                maxHeight: "280px",
+                borderRadius: 12,
+                objectFit: "cover",
+              }}
+            >
+              <source src={`http://localhost:8000${msg.mediaUrl}`} />
+            </video>
+          )}
+
+          {/* File (PDF, DOCX, etc.) */}
+{msg?.mediaUrl && msg?.mediaType === "file" && (
+  <a
+  target="_blank"
+    href={`http://localhost:8000${msg.mediaUrl}`}
+    download
+    style={{
+      marginTop: 6,
+      padding: "10px 15px",
+      borderRadius: 12,
+      background: mine ? "#1ca3ec" : "#f0f8ff",
+      color: mine ? "#fff" : "#333",
+      textDecoration: "none",
+      boxShadow: mine
+        ? "0 6px 8px rgba(0,176,255,0.1)"
+        : "0 6px 8px rgba(0,0,0,0.04)",
+      display: "inline-block",
+    }}
+  >
+    📄 {msg.fileName || "Download File"}
+  </a>
+)}
+
+        </div>
+      );
+    })}
+</div>
+
+
             {typing && (
               <div
                 style={{
@@ -548,54 +658,160 @@ export default function ChatSystem() {
             )}
           </div>
 
-          {/* Message Input Area */}
-          <div style={{ display: "flex", gap: 10 }}>
-            <input
-              value={sendMsg}
-              onChange={handleTyping}
-              placeholder={selectedUser ? "Type your message..." : "Select a user first"}
-              disabled={!selectedUser}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              style={{
-                flex: 1,
-                padding: 18,
-                borderRadius: 30,
-                border: `2px solid ${PRIMARY_COLOR}40`,
-                fontSize: 17,
-                transition: "all 0.3s ease",
-              }}
-              onFocus={(e) => (e.target.style.boxShadow = `0 0 0 4px ${PRIMARY_COLOR}30`)}
-              onBlur={(e) => (e.target.style.boxShadow = "none")}
-            />
-            <button
-              onClick={sendMessage}
-              disabled={!selectedUser || !sendMsg.trim()}
-              style={{
-                padding: "10px 30px",
-                background: PRIMARY_COLOR,
-                color: "white",
-                borderRadius: 30,
-                border: "none",
-                fontWeight: 700,
-                fontSize: 18,
-                cursor: selectedUser && sendMsg.trim() ? "pointer" : "not-allowed",
-                opacity: selectedUser && sendMsg.trim() ? 1 : 0.4,
-                transition: "all 0.3s ease",
-                boxShadow: "0 4px 15px rgba(0, 188, 212, 0.4)",
-              }}
-              onMouseOver={(e) => {
-                if (selectedUser && sendMsg.trim()) e.currentTarget.style.backgroundColor = PRIMARY_ACCENT;
-              }}
-              onMouseOut={(e) => {
-                if (selectedUser && sendMsg.trim()) e.currentTarget.style.backgroundColor = PRIMARY_COLOR;
-              }}
-            >
-              <span role="img" aria-label="send">
-                <i class="fa-solid fa-paper-plane"></i>
-              </span>{" "}
-              Send
-            </button>
-          </div>
+{selectedUser ? 
+
+<div
+  style={{
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    padding: "12px",
+    background: "white",
+    borderTop: "2px solid #e8f6ff",
+  }}
+>
+
+  {/* Hidden File Input */}
+<input
+  type="file"
+  accept="image/*,video/*,application/pdf,.doc,.docx,.txt"
+  ref={fileInputRef}
+  style={{ display: "none" }}
+  onChange={handleFileUpload}
+/>
+
+
+  {/* Input Box Container */}
+  <div
+    style={{
+      flex: 1,
+      position: "relative",
+      display: "flex",
+      alignItems: "center",
+      background: "#f8fcff",
+      border: "2px solid #bde6ff",
+      borderRadius: 30,
+      padding: "10px 16px",
+      boxShadow: "0 4px 14px rgba(0,0,0,0.08)",
+      transition: "0.25s",
+    }}
+  >
+
+    {/* Paperclip inside */}
+    <span
+      onClick={() => fileInputRef.current.click()}
+      style={{
+        fontSize: 22,
+        marginRight: 12,
+        cursor: "pointer",
+        color: "#7dc9ff",
+        transition: "0.2s",
+      }}
+      onMouseEnter={(e) => (e.target.style.transform = "scale(1.2)")}
+      onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+    >
+      📎
+    </span>
+
+    {/* Emoji Icon inside */}
+    <span
+      onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+      style={{
+        fontSize: 22,
+        marginRight: 12,
+        cursor: "pointer",
+        color: "#7dc9ff",
+        transition: "0.2s",
+      }}
+      onMouseEnter={(e) => (e.target.style.transform = "scale(1.2)")}
+      onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+    >
+      😀
+    </span>
+
+    {/* Actual Input */}
+    <input
+      value={sendMsg}
+      onChange={handleTyping}
+      placeholder="Type a message..."
+      style={{
+        flex: 1,
+        border: "none",
+        outline: "none",
+        fontSize: 16,
+        background: "transparent",
+        color: "#333",
+      }}
+      onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+    />
+  </div>
+
+  {/* Send Button */}
+  <button
+    onClick={sendMessage}
+    style={{
+      marginLeft: 12,
+      background: "#7dc9ff",
+      border: "none",
+      padding: "14px 20px",
+      borderRadius: 50,
+      color: "white",
+      fontSize: 16,
+      cursor: "pointer",
+      fontWeight: 600,
+      boxShadow: "0 6px 16px rgba(0,0,0,0.18)",
+      transition: "0.25s",
+    }}
+    onMouseEnter={(e) => (e.target.style.transform = "scale(1.10)")}
+    onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+  >
+   <i class="fa-solid fa-paper-plane"></i>  Send
+  </button>
+
+  {/* Emoji Picker Popup */}
+  {showEmojiPicker && (
+    <div
+      style={{
+        position: "absolute",
+        bottom: "60px",
+        left: "20px",
+        background: "#ffffff",
+        padding: "12px",
+        borderRadius: 16,
+        boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+        zIndex: 2000,
+        animation: "slideIn 0.2s ease-out",
+      }}
+    >
+      <EmojiPicker
+        onEmojiClick={(emojiData) => {
+          setSendMsg((prev) => prev + emojiData.emoji);
+          setShowEmojiPicker(false);
+        }}
+        theme="light"
+      />
+    </div>
+  )}
+
+  {/* Animation */}
+  <style>
+    {`
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    `}
+  </style>
+</div>
+
+    : ""}
+
         </div>
       </div>
       
