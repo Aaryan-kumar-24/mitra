@@ -15,6 +15,11 @@ const SHADOW_ELEGANT = "0 20px 50px rgba(0, 188, 212, 0.35), 0 5px 15px rgba(0, 
 // New Divider Gradient
 const DIVIDER_GRADIENT = `linear-gradient(to bottom, ${PRIMARY_ACCENT}30, ${PRIMARY_COLOR}80, ${PRIMARY_ACCENT}30)`;
 
+// Helper function to correctly format the profile image URL
+const getProfileImageUrl = (relativePath) => {
+    if (!relativePath) return null;
+    return `http://localhost:8000${relativePath}`;
+};
 
 const socket = io("http://localhost:8000", { autoConnect: true });
 
@@ -38,7 +43,6 @@ export default function ChatSystem() {
   }, [user]);
 
   const loadChatUsers = async () => {
-    // ... (unchanged logic)
     try {
       const res = await axios.get(
         `http://localhost:8000/chat-users/${user._id}`,
@@ -77,7 +81,6 @@ export default function ChatSystem() {
   };
 
   useEffect(() => {
-    // ... (unchanged logic)
     if (!user) return;
 
     socket.emit("addUser", user._id);
@@ -121,7 +124,6 @@ export default function ChatSystem() {
   }, [messages, typing]);
 
   const handleSearch = async (phone) => {
-    // ... (unchanged logic)
     if (!phone) return;
 
     try {
@@ -155,7 +157,6 @@ export default function ChatSystem() {
   };
 
   const loadMessages = async (receiverId) => {
-    // ... (unchanged logic)
     try {
       const res = await axios.get(
         `http://localhost:8000/messages/${user._id}/${receiverId}?sort=asc`,
@@ -168,7 +169,6 @@ export default function ChatSystem() {
   };
 
   const selectUserFromList = async (u) => {
-    // ... (unchanged logic)
     setSelectedUser(u);
     await loadMessages(u._id);
 
@@ -189,7 +189,6 @@ export default function ChatSystem() {
   };
 
   const sendMessage = async () => {
-    // ... (unchanged logic)
     if (!sendMsg.trim() || !selectedUser) return;
 
     const msg = {
@@ -211,7 +210,6 @@ export default function ChatSystem() {
   };
 
   const handleTyping = (e) => {
-    // ... (unchanged logic)
     setSendMsg(e.target.value);
     socket.emit("typing", {
       senderId: user._id,
@@ -281,10 +279,9 @@ export default function ChatSystem() {
             width: "350px", // Fixed width for a more controlled sidebar
             background: CARD_BG,
             padding: 25,
-            // Removed borderRight here, the divider will take over
             display: "flex",
             flexDirection: "column",
-            position: 'relative', // Needed for relative positioning of the divider
+            position: 'relative',
           }}
         >
           {/* *** Vertical Gradient Divider *** */}
@@ -297,7 +294,7 @@ export default function ChatSystem() {
                   height: '100%',
                   background: DIVIDER_GRADIENT, // The beautiful gradient
                   boxShadow: `1px 0 8px ${PRIMARY_COLOR}30`, // Subtle shadow for depth
-                  zIndex: 1, // Ensure it's above the sidebar content if padding was an issue
+                  zIndex: 1,
               }}
           ></div>
           {/* *** End Divider *** */}
@@ -345,23 +342,42 @@ export default function ChatSystem() {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
-                  <div
-                    style={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: "50%",
-                      background: PRIMARY_ACCENT,
-                      color: "white",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: 600,
-                      fontSize: 20,
-                      flexShrink: 0,
-                    }}
-                  >
-                    {u.name[0].toUpperCase()}
-                  </div>
+                  
+                  {/* 👇️ 1. USER LIST AVATAR LOGIC */}
+                  {u.avatar ? (
+                    <img 
+                      src={getProfileImageUrl(u.avatar)} 
+                      alt={u.name[0]} 
+                      style={{
+                          width: 48,
+                          height: 48,
+                          borderRadius: "50%",
+                          objectFit: 'cover',
+                          border: `2px solid ${PRIMARY_ACCENT}80`,
+                          flexShrink: 0,
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: "50%",
+                        background: PRIMARY_ACCENT,
+                        color: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontWeight: 600,
+                        fontSize: 20,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {u.name[0].toUpperCase()}
+                    </div>
+                  )}
+                  {/* 👆️ END USER LIST AVATAR LOGIC */}
+                  
                   <div style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
                     <strong style={{ color: selectedUser?._id === u._id ? PRIMARY_COLOR : "#333", fontSize: 16 }}>
                       {u.name}
@@ -381,12 +397,12 @@ export default function ChatSystem() {
                         animation: "flash 1.5s infinite",
                       }}
                     ></span>
-                  )}
-                  <div style={{ fontSize: 11, color: "#999" }}>
-                    {u.lastMessageTime
-                      ? new Date(u.lastMessageTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                      : "-"}
-                  </div>
+                    )}
+                    <div style={{ fontSize: 11, color: "#999" }}>
+                      {u.lastMessageTime
+                        ? new Date(u.lastMessageTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        : "-"}
+                    </div>
                 </div>
               </div>
             ))}
@@ -416,7 +432,22 @@ export default function ChatSystem() {
           >
             {selectedUser ? (
                 <>
-                    <div
+                    {/* 👇️ 2. CHAT HEADER AVATAR LOGIC */}
+                    {selectedUser.avatar ? (
+                      <img
+                        src={getProfileImageUrl(selectedUser.avatar)}
+                        alt={selectedUser.name[0]}
+                        style={{
+                          width: 55, height: 55,
+                          borderRadius: "50%",
+                          objectFit: 'cover',
+                          border: `3px solid ${PRIMARY_ACCENT}80`,
+                          boxShadow: "0 4px 12px rgba(0, 188, 212, 0.4)",
+                          animation: "floatUp 1s ease-in-out infinite alternate"
+                        }}
+                      />
+                    ) : (
+                      <div
                         style={{
                             width: 55, height: 55,
                             borderRadius: "50%",
@@ -427,9 +458,12 @@ export default function ChatSystem() {
                             boxShadow: "0 4px 12px rgba(0, 188, 212, 0.4)",
                             animation: "floatUp 1s ease-in-out infinite alternate"
                         }}
-                    >
+                      >
                         {selectedUser.name[0].toUpperCase()}
-                    </div>
+                      </div>
+                    )}
+                    {/* 👆️ END CHAT HEADER AVATAR LOGIC */}
+
                     <h2 style={{ fontWeight: 700, color: PRIMARY_COLOR, fontSize: 26 }}>
                         {selectedUser.name}
                     </h2>

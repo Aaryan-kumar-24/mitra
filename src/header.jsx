@@ -120,12 +120,25 @@ function Header() {
                 {/* We use optional chaining (user?.name) to safely access properties, 
                   as the 'user' object might be null while fetching or before login.
                 */}
-                <ProfileCard iconClass="bi-person-fill icon-green" label="Full Name" value={user?.name}/>
-                <ProfileCard iconClass="bi-envelope-fill icon-blue" label="Email" value={user?.email}/>
-                <ProfileCard iconClass="bi-telephone-fill icon-orange" label="Phone" value={user?.phone}/>
-                <ProfileCard iconClass="bi-house-door-fill icon-purple" label="College" value={user?.college}/>
-                <ProfileCard iconClass="bi-cpu-fill icon-red" label="Branch" value={user?.branch}/>
-                <ProfileCard iconClass="bi-calendar-date-fill icon-green" label="Year" value={user?.year}/>
+<div className="flex flex-col items-center mb-6">
+  <img 
+    // 👇️ CORRECTED SRC: Prefix the relative path with the server's base URL
+    src={`http://localhost:8000${user?.profileUrl}`} 
+    alt="Profile"
+    className="w-32 h-32 rounded-full object-cover shadow-lg border-4 border-white"
+  />
+
+  <h2 className="mt-3 text-xl font-semibold text-gray-800">
+    {user?.name}
+  </h2>
+</div>
+                <ProfileCard  label="Email" value={user?.email}/>
+                <ProfileCard  label="Phone" value={user?.phone}/>
+                <ProfileCard  label="College" value={user?.college}/>
+                    <div className="grid grid-cols-2 gap-3">
+        <ProfileCard label="Year" value={user?.year} />
+        <ProfileCard label="Branch" value={user?.branch} />
+      </div>
 
                 {/* Logout Button */}
                 <div className="text-center mt-6">
@@ -146,8 +159,7 @@ function Header() {
         .profile-card.visible { animation: fadeSlideIn 0.6s ease forwards; background-color: rgba(244, 238, 238, 0.32); }
         .profile-card:hover { transform: scale(1.03); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
         @keyframes fadeSlideIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .profile-card i { font-size: 1.7rem; margin-right: 15px; padding: 10px; border-radius: 50%; width: 45px; height: 45px; text-align: center; line-height: 25px; color: white; }
-        .icon-green { background: linear-gradient(45deg, #66bb6a, #388e3c); }
+          .icon-green { background: linear-gradient(45deg, #66bb6a, #388e3c); }
         .icon-blue { background: linear-gradient(45deg, #42a5f5, #1e88e5); }
         .icon-orange { background: linear-gradient(45deg, #ffa726, #fb8c00); }
         .icon-purple { background: linear-gradient(45deg, #ab47bc, #8e24aa); }
