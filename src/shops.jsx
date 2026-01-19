@@ -71,11 +71,17 @@ function Shops() {
 
       <h1 className="font-medium font-serif ml-[45px] text-[1.52rem] italic">Nearby Shops</h1>
 
-      {filteredList.length > 0 ? (
-        filteredList.map((shop, i) => <ShopsCard key={i} data={shop} />)
-      ) : (
-        <p className="ml-[50px] text-gray-500">No shops found...</p>
-      )}
+ {filteredList.length > 0 ? (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 
+                  gap-6 px-[50px] py-[20px]">
+    {filteredList.map((shop, i) => (
+      <ShopsCard key={i} data={shop} />
+    ))}
+  </div>
+) : (
+  <p className="ml-[50px] text-gray-500">No shops found...</p>
+)}
+
     </>
   );
 }

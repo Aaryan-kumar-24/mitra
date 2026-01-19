@@ -73,11 +73,19 @@ function Pg() {
 
       <h1 className="font-medium font-serif ml-[45px] text-[1.52rem] italic">Nearby PG</h1>
 
-      {filteredList.length > 0 ? (
-        filteredList.map((data, i) => <Pgcard key={i} data={data} />)
-      ) : (
-        <p className="ml-[50px] text-gray-500">Radhe Radhe Sab bhagwan pee chor doo</p>
-      )}
+{filteredList.length > 0 ? (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 
+                  gap-6 px-[50px] py-[20px]">
+    {filteredList.map((data, i) => (
+      <Pgcard key={i} data={data} />
+    ))}
+  </div>
+) : (
+  <p className="ml-[50px] text-gray-500">
+    Radhe Radhe Sab bhagwan pee chor doo
+  </p>
+)}
+
     </>
   );
 }
