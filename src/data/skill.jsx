@@ -10,19 +10,80 @@
             { "title": "Prerequisites", "content": "Basic computer knowledge, familiarity with the internet, and interest in programming and design principles." },
             { "title": "Learning Time", "content": "About 3–6 months with consistent practice to master fundamentals and build real projects." }
         ],
-        "resources": [
-            { "title": "HTML Basics (YouTube)", "link": "https://www.youtube.com/watch?v=pQN-pnXPaVg", "description": "Introductory guide to HTML structure and tags.", "thumbnail": "https://img.youtube.com/vi/pQN-pnXPaVg/maxresdefault.jpg", "type": "YouTube Video", "duration": "3h" },
-            { "title": "CSS Crash Course", "link": "https://www.youtube.com/watch?v=1Rs2ND1ryYc", "description": "Complete CSS tutorial covering layouts, flexbox, grid, and responsive design.", "thumbnail": "https://img.youtube.com/vi/1Rs2ND1ryYc/maxresdefault.jpg", "type": "YouTube Video", "duration": "4h" },
-            { "title": "JavaScript Guide", "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide", "description": "Comprehensive guide to JavaScript concepts and syntax.", "thumbnail": "https://developer.mozilla.org/static/img/favicon144.png", "type": "Documentation", "duration": "Ongoing" },
-            { "title": "FreeCodeCamp Web Development", "link": "https://www.freecodecamp.org/learn/", "description": "Full web development curriculum with projects and certifications.", "thumbnail": "https://www.freecodecamp.org/news/content/images/2022/03/fcc_primary_large.jpg", "type": "Online Course", "duration": "300h" }
-        ],
+"resources": [
+  {
+    "title": "Web Development in Hindi – CodeHelp (Love Babbar)",
+    "link": "https://www.youtube.com/watch?v=Vi9bxu-M-ag",
+    "description": "Complete web development introduction with roadmap and basics in Hindi.",
+    "thumbnail": "https://img.youtube.com/vi/Vi9bxu-M-ag/maxresdefault.jpg",
+    "type": "YouTube Video",
+    "duration": "3h"
+  },
+  {
+    "title": "HTML Crash Course in Hindi – Hitesh Choudhary",
+    "link": "https://www.youtube.com/watch?v=kUMe1FH4CHE",
+    "description": "Beginner-friendly HTML crash course explained in simple Hindi.",
+    "thumbnail": "https://img.youtube.com/vi/kUMe1FH4CHE/maxresdefault.jpg",
+    "type": "YouTube Video",
+    "duration": "1.5h"
+  },
+  {
+    "title": "JavaScript Full Course in Hindi – Clever Programmer",
+    "link": "https://www.youtube.com/watch?v=Qqx_wzMmFeA",
+    "description": "JavaScript from scratch with practical coding examples.",
+    "thumbnail": "https://img.youtube.com/vi/Qqx_wzMmFeA/maxresdefault.jpg",
+    "type": "YouTube Video",
+    "duration": "8h"
+  },
+  {
+    "title": "CSS Complete Tutorial in Hindi – Tech Gun",
+    "link": "https://www.youtube.com/watch?v=1PnVor36_40",
+    "description": "CSS basics to advanced including layouts and styling concepts.",
+    "thumbnail": "https://img.youtube.com/vi/1PnVor36_40/maxresdefault.jpg",
+    "type": "YouTube Video",
+    "duration": "5h"
+  },
+  {
+    "title": "JavaScript Projects in Hindi – GreatStack",
+    "link": "https://www.youtube.com/watch?v=EWv2jnhZErc",
+    "description": "Build beginner-friendly JavaScript projects with explanations.",
+    "thumbnail": "https://img.youtube.com/vi/EWv2jnhZErc/maxresdefault.jpg",
+    "type": "YouTube Video",
+    "duration": "2.5h"
+  },
+  {
+    "title": "Web Development Roadmap in Hindi – Apna College (Shradha Khapra)",
+    "link": "https://www.youtube.com/watch?v=ZxKM3DCV2kE",
+    "description": "Clear and beginner-friendly full-stack web development roadmap in Hindi.",
+    "thumbnail": "https://img.youtube.com/vi/ZxKM3DCV2kE/maxresdefault.jpg",
+    "type": "YouTube Video",
+    "duration": "1h"
+  },
+  {
+    "title": "Bootstrap Tutorial in Hindi – LearnVern",
+    "link": "https://www.youtube.com/watch?v=vpAJ0s5S2t0",
+    "description": "Bootstrap basics for responsive web design in Hindi.",
+    "thumbnail": "https://img.youtube.com/vi/vpAJ0s5S2t0/maxresdefault.jpg",
+    "type": "YouTube Video",
+    "duration": "4h"
+  },
+  {
+    "title": "PHP for Web Development in Hindi – Geeky Shows",
+    "link": "https://www.youtube.com/watch?v=6EukZDFE_Zg",
+    "description": "Server-side web development using PHP explained in Hindi.",
+    "thumbnail": "https://img.youtube.com/vi/6EukZDFE_Zg/maxresdefault.jpg",
+    "type": "YouTube Video",
+    "duration": "6h"
+  }
+]
+,
         "roadmap": [
-            { "step": "Step 1", "title": "Learn HTML", "desc": "Understand HTML structure, semantic tags, forms, and accessibility. Build static pages.", "color": "bg-blue-500" },
+            { "step": "Step 1", "title": "Learn HTML", "desc": "Understand HTML structure, semantic tags, forms, and accessibility. Build static pages.", "color": "bg-green-500" },
             { "step": "Step 2", "title": "Master CSS", "desc": "Learn selectors, box model, flexbox, grid layouts, animations, and responsive design.", "color": "bg-green-500" },
-            { "step": "Step 3", "title": "JavaScript Basics", "desc": "Understand variables, functions, DOM manipulation, events, ES6+, and asynchronous JavaScript.", "color":"bg-blue-500"  },
+            { "step": "Step 3", "title": "JavaScript Basics", "desc": "Understand variables, functions, DOM manipulation, events, ES6+, and asynchronous JavaScript.", "color":"bg-green-500"  },
             { "step": "Step 4", "title": "Frontend Frameworks", "desc": "Learn frameworks like React.js or Vue.js for dynamic, component-based UI.", "color":"bg-green-500"  },
-            { "step": "Step 5", "title": "Backend Basics", "desc": "Learn Node.js, Express.js, and REST APIs for front-end and database integration.", "color": "bg-blue-500" },
-            { "step": "Step 6", "title": "Deploy & Optimize", "desc": "Deploy apps using Netlify, Vercel, or AWS, and optimize performance.", "color": "bg-green-500" }
+            { "step": "Step 5", "title": "Backend Basics", "desc": "Learn Node.js, Express.js, and REST APIs for front-end and database integration.", "color": "bg-green-500" },
+            { "step": "Step 6", "title": "Deploy & Optimize", "desc": "Deploy apps using Netlify, Vercel, or AWS, and optimize performance.", "color":"bg-green-500" }
         ]
         },
         {

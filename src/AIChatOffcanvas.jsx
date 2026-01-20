@@ -21,84 +21,49 @@ const OffcanvasChatBot = ({ onClose }) => {
 
     useEffect(scrollToBottom, [messages]);
 
-    const handleSend = async (e) => {
-        e.preventDefault();
-        if (!input.trim() || isLoading) return;
+const handleSend = async (e) => {
+  e.preventDefault();
+  if (!input.trim() || isLoading) return;
 
-        const newUserMessage = { role: 'user', content: input };
-        
-        const newHistory = [...messages, newUserMessage];
-        setMessages(newHistory);
-        setInput('');
-        setIsLoading(true);
+  const userMessage = { role: "user", content: input };
+  const history = [...messages, userMessage];
 
-        const token = getToken();
-        if (!token) {
-            alert("You must be logged in to chat.");
-            setIsLoading(false);
-            return;
-        }
+  setMessages(history);
+  setInput("");
+  setIsLoading(true);
 
-        try {
-            const response = await fetch(`${API_BASE_URL}/chat-stream`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ messages: newHistory }),
-            });
+  const token = getToken();
+  if (!token) {
+    alert("You must be logged in");
+    setIsLoading(false);
+    return;
+  }
 
-            if (!response.ok || !response.body) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+  try {
+    const res = await fetch(`${API_BASE_URL}/chatbot`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ messages: history }),
+    });
 
-            let aiResponseContent = '';
-            setMessages((prev) => [...prev, { role: 'assistant', content: aiResponseContent }]);
+    const data = await res.json();
 
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-
-            while (true) {
-                const { value, done } = await reader.read();
-                if (done) break;
-
-                const chunk = decoder.decode(value);
-                const lines = chunk.split('\n').filter(line => line.startsWith('data:'));
-                
-                for (const line of lines) {
-                    const dataString = line.substring(5).trim();
-                    try {
-                        const data = JSON.parse(dataString);
-                        
-                        if (data.error) {
-                            aiResponseContent += `\n\n**Error:** ${data.error}`;
-                        } else if (data.content) {
-                            aiResponseContent += data.content;
-                        }
-
-                        setMessages((prev) => {
-                            const updatedMessages = [...prev];
-                            if (updatedMessages.length > 0 && updatedMessages[updatedMessages.length - 1].role === 'assistant') {
-                                updatedMessages[updatedMessages.length - 1].content = aiResponseContent;
-                            }
-                            return updatedMessages;
-                        });
-                        scrollToBottom();
-
-                    } catch (e) {
-                        // Handle incomplete JSON lines
-                    }
-                }
-            }
-
-        } catch (error) {
-            console.error('Streaming API Error:', error);
-            setMessages((prev) => [...prev, { role: 'assistant', content: `❌ Error: Could not connect to the AI service. Please ensure your backend is running.` }]);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    setMessages((prev) => [
+      ...prev,
+      { role: "assistant", content: data.reply },
+    ]);
+  } catch (err) {
+    setMessages((prev) => [
+      ...prev,
+      { role: "assistant", content: "❌ AI service unavailable" },
+    ]);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
     // --- Styling and JSX ---
     return (

@@ -48,8 +48,9 @@ const { token } = useContext(AuthContext);
 
 // Create room ID based on two users
 const room = selectedUser
-  ? [user?._id, selectedUser?._id].sort().join("-")
+  ? [user?._id, selectedUser?._id].sort().join("_")
   : null;
+
 
 
   // --- LOGIC FUNCTIONS (Unchanged for stability) ---
