@@ -6,6 +6,7 @@ import { AuthContext } from "./AuthContext";
 import EmojiPicker from "emoji-picker-react";
 import { UNSAFE_WithHydrateFallbackProps } from "react-router-dom";
 
+import { useLocation } from "react-router-dom";
 
 
 // Color Palette & Design Constants
@@ -50,6 +51,37 @@ const { token } = useContext(AuthContext);
 const room = selectedUser
   ? [user?._id, selectedUser?._id].sort().join("_")
   : null;
+const location = useLocation();
+const passedPhone = location.state?.phone;
+
+
+const autoOpenChatByPhone = async (phone) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/search-user/${phone}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    const foundUser = res.data;
+
+    // Add user to chat list if not exists
+    setChatUsers((prev) => {
+      const exists = prev.find((u) => u._id === foundUser._id);
+      if (!exists) return [...prev, { ...foundUser, hasUnread: false }];
+      return prev;
+    });
+
+    // Select user and load messages
+    selectUserFromList(foundUser);
+  } catch (err) {
+    console.error("Auto chat user not found", err);
+  }
+};
+useEffect(() => {
+  if (passedPhone && user) {
+    autoOpenChatByPhone(passedPhone);
+  }
+}, [passedPhone, user]);
 
 
 

@@ -87,6 +87,15 @@ const matchesCategory =
     { label: "PYQ (Previous Year Questions)", icon: "fas fa-question-circle" },
     { label: "YouTube E-Notes", icon: "fab fa-youtube" },
   ];
+const getFileExtension = (fileUrl) => {
+  if (!fileUrl) return "";
+  return fileUrl.split(".").pop().toLowerCase();
+};
+
+const isPreviewSupported = (fileUrl) => {
+  const ext = getFileExtension(fileUrl);
+  return ["pdf", "png", "jpg", "jpeg", "gif", "txt"].includes(ext);
+};
 
   return (
     <>
@@ -147,7 +156,7 @@ const matchesCategory =
       </div>
 
       {/* Main Notes Display */}
-      <div className="ml-[320px] mt-[40px]">
+      <div className="ml-[320px] mt-[80px]">
         <h1 className="font-serif font-bold text-[2rem] text-center text-black">
           View All Notes
         </h1>
@@ -181,21 +190,34 @@ const matchesCategory =
                   <i className="fas fa-upload"></i> {note.uploaded_by}
                 </div>
 
-                <a
-                  href={`http://localhost:8000${note.fileUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-sky-300 hover:bg-sky-400 text-white px-4 py-2 rounded-xl mb-2 flex items-center gap-2 w-[138px] transition"
-                >
-                  <i className="fas fa-eye"></i> Preview
-                </a>
+{isPreviewSupported(note.fileUrl) ? (
+  <a
+    href={`http://localhost:8000/preview/${note.fileUrl.split("/").pop()}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="bg-sky-300 hover:bg-sky-400 text-white px-4 py-2 rounded-xl mb-2 flex items-center gap-2 w-[138px]"
+  >
+    <i className="fas fa-eye"></i> Preview
+  </a>
+) : (
+  <button
+    disabled
+    className="bg-gray-300 text-gray-600 px-4 py-2 rounded-xl mb-2 flex items-center gap-2 w-[138px] cursor-not-allowed"
+    title="Preview not supported for this file type"
+  >
+    <i className="fas fa-eye-slash"></i> Preview
+  </button>
+)}
 
-                <a
-                  href={`http://localhost:8000/download/${note.fileUrl.split("/").pop()}`}
-                  className="bg-sky-300 hover:bg-sky-400 text-white px-4 py-2 rounded-xl flex items-center w-[138px] gap-2 transition"
-                >
-                   <i className="fas fa-download"></i> Download
-                </a>
+
+<a
+  href={`http://localhost:8000/download/${note.fileUrl.split("/").pop()}`}
+  className="bg-sky-300 hover:bg-sky-400 text-white px-4 py-2 rounded-xl flex items-center gap-2 w-[138px]"
+>
+  <i className="fas fa-download"></i> Download
+</a>
+
+
               </div>
             </div>
           ))

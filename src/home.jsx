@@ -1,7 +1,8 @@
 import {AIChatOffcanvas} from "./AIChatOffcanvas";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./AuthContext";
+import { useEffect, useState, useContext } from "react";
 
-
-import { useEffect, useState } from "react";
 import { Header } from "./header";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -34,6 +35,7 @@ export function Home() {
       
       {/* Components defined later in this file */}
       <Corosel />
+         <NewsMarquee /> 
       <Features />
       <StudentProjectsSlider />
       <StudentMarket /> 
@@ -106,6 +108,91 @@ export function Corosel() {
   );
 }
 
+
+export default function NewsMarquee() {
+  const [isPaused, setIsPaused] = useState(false);
+
+  // 🔹 Editable news anytime
+  const newsItems = [
+    "🎓 College Fest from March 5",
+    "🚀 New internships available",
+    "📘 Notes uploaded",
+    "🛒 Marketplace sale under ₹100",
+    "💬 Chat feature live for students",
+    "🎯 Hackathon registrations open",
+  ];
+
+  // 🔁 Duplicate for seamless infinite scroll
+  const seamlessNews = [...newsItems, ...newsItems];
+
+  return (
+    <div
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      style={{
+        width: "100%",
+        height: "32px",
+        marginTop: "8px",
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        fontWeight: "600",
+        fontFamily: "Poppins, sans-serif",
+
+        /* 🌤 Glass sky-blue professional background */
+        background:
+          "linear-gradient(90deg, rgba(224,247,255,0.9), rgba(179,236,255,0.9))",
+        backdropFilter: "blur(6px)",
+        borderTop: "1px solid rgba(0,119,182,0.2)",
+        borderBottom: "1px solid rgba(0,119,182,0.2)",
+        boxShadow: "0 4px 12px rgba(0,119,182,0.15)",
+        cursor: "pointer",
+      }}
+    >
+      {/* 🔁 Moving ticker */}
+      <div style={{ width: "100%", overflow: "hidden" }}>
+        <div
+          style={{
+            display: "inline-flex",
+            whiteSpace: "nowrap",
+            gap: "80px",
+            paddingLeft: "40px",
+            animation: "scrollLeft 28s linear infinite",
+            animationPlayState: isPaused ? "paused" : "running",
+          }}
+        >
+          {seamlessNews.map((item, index) => (
+            <span
+              key={index}
+              style={{
+                color: "#005f8f",
+                fontSize: "14px",
+                letterSpacing: "0.3px",
+                textShadow: "0 1px 2px rgba(0,0,0,0.08)",
+              }}
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* 🔥 Inline animation */}
+      <style>
+        {`
+          @keyframes scrollLeft {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+          }
+        `}
+      </style>
+    </div>
+  );
+}
+
+
+
+
 // ---------------- 3. Features ----------------
 export function Features() {
 const features = [
@@ -161,7 +248,7 @@ const features = [
 
 
   return (
-<section className="py-12 bg-gray-50">
+<section className="py-12 bg-white">
   <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">
     <i className="fas fa-users mr-10"></i> Features We Provide
   </h1>
@@ -205,15 +292,24 @@ const features = [
 }
 
 // ---------------- 4. StudentProjectsSlider ----------------
-export function StudentProjectsSlider() { // Added 'export'
+export function StudentProjectsSlider() {
   const [projects, setProjects] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
+
+  const [search, setSearch] = useState("");
+  const [showResults, setShowResults] = useState(false);
+
   const [newProject, setNewProject] = useState({
-    studentName: "", title: "", description: "", video: null,
+    studentName: "",
+    title: "",
+    description: "",
+    video: null,
   });
 
-  // Fetch all projects from backend (MongoDB)
+  const navigate = useNavigate();
+
+  // 📡 Fetch projects
   useEffect(() => {
     axios
       .get("http://localhost:8000/get-projects")
@@ -221,11 +317,28 @@ export function StudentProjectsSlider() { // Added 'export'
       .catch((err) => console.error("❌ Error fetching projects:", err));
   }, []);
 
+  // ⬅️➡️ slider controls
   const prevSlide = () =>
     setCurrentIndex((prev) => (prev === 0 ? projects.length - 1 : prev - 1));
+
   const nextSlide = () =>
     setCurrentIndex((prev) => (prev + 1) % projects.length);
 
+  // 🔎 filter titles
+  const filteredTitles =
+    search.trim() === ""
+      ? projects
+      : projects.filter((p) =>
+          p.title.toLowerCase().includes(search.toLowerCase())
+        );
+
+  const openProject = (index) => {
+    setCurrentIndex(index);
+    setShowResults(false);
+    setSearch("");
+  };
+
+  // 📤 form handlers
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProject({ ...newProject, [name]: value });
@@ -235,10 +348,12 @@ export function StudentProjectsSlider() { // Added 'export'
     setNewProject({ ...newProject, video: e.target.files[0] });
   };
 
-  // Handle video upload
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
+      const token = localStorage.getItem("token");
+
       const formData = new FormData();
       formData.append("studentName", newProject.studentName);
       formData.append("title", newProject.title);
@@ -248,116 +363,168 @@ export function StudentProjectsSlider() { // Added 'export'
       const response = await axios.post(
         "http://localhost:8000/add-project",
         formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       alert("✅ Project uploaded successfully!");
       setProjects([...projects, response.data.project]);
       setShowModal(false);
       setNewProject({ studentName: "", title: "", description: "", video: null });
+
     } catch (error) {
       console.error("❌ Upload failed:", error);
       alert("Error uploading project");
     }
   };
 
-  const cardWidth = 40; // rem
-  const cardHeight = 20; // rem
+  const cardWidth = 40;
+  const cardHeight = 20;
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-white relative">
+
+      {/* 🔍 SEARCH BAR */}
+{/* 🔍 SEARCH BAR */}
+<div className="absolute top-22 left-10 w-[420px] z-20">
+  <div className="relative">
+    <input
+      type="text"
+      value={search}
+      placeholder="Search project title..."
+      onChange={(e) => setSearch(e.target.value)}
+      onFocus={() => setShowResults(true)}
+      onBlur={() => setTimeout(() => setShowResults(false), 150)}
+      className="pl-[60px] pr-4 w-full border-[2px] h-[45px] rounded-2xl
+                 bg-white backdrop-blur-md text-gray-700 placeholder-gray-400
+                 focus:outline-none focus:ring-1 focus:ring-sky-200"
+    />
+
+    <button className="absolute top-0 right-0 h-full px-5
+                       bg-sky-200
+                       text-white rounded-e-2xl backdrop-blur-md transition">
+      <i className="fas fa-search"></i>
+    </button>
+  </div>
+
+  {/* 🌫 Glass Dropdown */}
+  {showResults && (
+    <div className="mt-2 rounded-2xl shadow-2xl max-h-56 overflow-y-auto
+                    bg-white/70 backdrop-blur-xl border border-gray-200">
+
+      {filteredTitles.length > 0 ? (
+        filteredTitles.map((p, i) => {
+          const realIndex = projects.findIndex(
+            (proj) => proj.title === p.title
+          );
+
+          return (
+            <div
+              key={i}
+              onClick={() => openProject(realIndex)}
+              className="px-5 py-3 cursor-pointer text-gray-700
+                         hover:bg-gray-100/70 transition"
+            >
+              {p.title}
+            </div>
+          );
+        })
+      ) : (
+        <div className="px-5 py-3 text-gray-400 text-sm">
+          No project found
+        </div>
+      )}
+    </div>
+  )}
+</div>
+
+
+      {/* 🖼 Cartoon with MORE left margin */}
+      <img
+        src={cartoon}
+        alt="cartoon"
+        className="absolute top-[140px] left-[70px] w-[390px] h-[390px]"
+      />
+
+      {/* 🎓 Title */}
       <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
         🎓 Student Projects Showcase
       </h2>
-<img 
-  src={cartoon}
-  alt="cartoon"
-  className="absolute top-[1300px] left-[48px] w-[600px] h-[600px] "
-/>
 
+      {/* ➕ Upload Button */}
+      <button
+        onClick={() => setShowModal(true)}
+        className="absolute left-[650px] top-[200px] bg-blue-300 hover:bg-blue-400
+                   text-white py-3 px-4 rounded-full shadow-lg z-20"
+      >
+        <i className="fas fa-upload"></i>
+      </button>
+
+      {/* 🎞 Slider */}
       <div className="relative w-full flex justify-center items-center">
-        {/* Upload Button */}
-        <button
-          onClick={() => setShowModal(true)}
-          className="absolute bg-blue-300 hover:bg-blue-400 text-white py-3 px-4 rounded-full shadow-lg z-10"
-          style={{ left: "640px", top: "25%", transform: "translateY(-50%)" }}
-        >
-          <i className="fas fa-upload"></i>
-        </button>
 
         {/* Left Arrow */}
         <button
           onClick={prevSlide}
-          className="absolute text-white bg-black/40 hover:bg-black/60 p-3 rounded-full z-10 shadow-lg"
-          style={{ left: "650px", top: "50%", transform: "translateY(-50%)" }}
+          className="absolute left-[650px] top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full z-10"
         >
           ❮
         </button>
 
-        {/* Slider (rest of the JSX remains the same...) */}
+        {/* Cards */}
         <div className="relative w-full max-w-7xl flex justify-end h-[28rem]">
           {projects.map((proj, index) => {
             let offset = index - currentIndex;
             if (offset < -Math.floor(projects.length / 2)) offset += projects.length;
             if (offset > Math.floor(projects.length / 2)) offset -= projects.length;
-            const isCenter = offset === 0;
-            const scale = isCenter ? 1 : 0.75;
-            const translateX = offset * (cardWidth * 0.6);
-            const zIndex = isCenter ? 10 : 5;
-            const opacity = Math.abs(offset) > 2 ? 0 : 1;
 
-            const videoUrl = proj.videoUrl
-              ? `http://localhost:8000/${proj.videoUrl.replace(/\\/g, "/")}`
-              : null;
+            const scale = offset === 0 ? 1 : 0.75;
+            const translateX = offset * (cardWidth * 0.6);
+            const zIndex = offset === 0 ? 10 : 5;
+
+            const videoUrl = `http://localhost:8000/video/${proj.videoUrl.split("/").pop()}`;
 
             return (
               <div
                 key={index}
-                className="absolute top-0 rounded-2xl shadow-2xl cursor-pointer transition-all duration-500 flex flex-col justify-between overflow-hidden"
+                className="absolute top-0 rounded-2xl shadow-2xl overflow-hidden"
                 style={{
                   width: `${cardWidth}rem`,
                   height: `${cardHeight}rem`,
                   transform: `translateX(${translateX}px) scale(${scale})`,
                   zIndex,
-                  opacity,
                   backgroundColor: "#000",
                 }}
               >
-                {/* 🎥 Video Player */}
-                {videoUrl ? (
-                  <video
-                    src={videoUrl}
-                    className="absolute inset-0 w-full h-full object-cover rounded-2xl"
-                    autoPlay loop muted playsInline
-                  />
-                ) : (
-                  <img
-                    src={fab}
-                    alt="Default"
-                    className="absolute inset-0 w-full h-full object-cover rounded-2xl"
-                  />
-                )}
+                <video
+                  src={videoUrl}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
 
-                <div className="absolute inset-0 bg-black/40 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-black/20" />
 
-                {/* Card Content */}
-                <div className="relative z-10 p-6 flex flex-col justify-between h-full text-white">
+                <div className="relative z-10 p-6 text-white h-full flex flex-col justify-between">
                   <div>
-                    <h3 className="text-2xl top-1 font-bold">{proj.title}</h3>
+                    <h3 className="text-2xl font-bold">{proj.title}</h3>
                     <p className="mt-2 text-sm">{proj.description}</p>
                   </div>
-                  <div className="mt-4 flex items-center justify-between">
-                    <p className="text-sm">
-                      By <span className="font-semibold">{proj.studentName}</span>
-                    </p>
-                    <button
-                      className="absolute bottom-3 right-3 flex items-center gap-2 px-3 py-2 rounded-2xl
-                            bg-sky-400/70 text-white font-semibold cursor-pointer
-                            transition-all duration-300 hover:bg-sky-400/90 hover:translate-y-[-2px]"
-                    >
-                      Connect
-                    </button>
-                  </div>
+
+                  <button
+                    onClick={() =>
+                      navigate("/chat", { state: { phone: proj.phone } })
+                    }
+                    className="self-end bg-sky-400/80 px-3 py-2 rounded-xl"
+                  >
+                    Connect
+                  </button>
                 </div>
               </div>
             );
@@ -367,34 +534,73 @@ export function StudentProjectsSlider() { // Added 'export'
         {/* Right Arrow */}
         <button
           onClick={nextSlide}
-          className="absolute right-2 md:right-6 text-white bg-black/40 hover:bg-black/60 p-3 rounded-full z-10 shadow-lg"
+          className="absolute right-6 bg-black/40 text-white p-3 rounded-full"
         >
           ❯
         </button>
       </div>
 
-      {/* Upload Modal (rest of the JSX remains the same...) */}
+      {/* 🪟 Upload Modal (same UI) */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
+
             <button
-              className="absolute top-4 right-4 text-sky-500 hover:text-sky-700 text-2xl font-bold transition"
+              className="absolute top-4 right-4 text-sky-400 hover:text-sky-600 text-2xl font-bold"
               onClick={() => setShowModal(false)}
             >
               ✖
             </button>
 
             <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
-              Upload Project
+              Upload Project 🎓
             </h3>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              {/* Input fields */}
-              <input type="text" name="studentName" placeholder="Student Name" value={newProject.studentName} onChange={handleInputChange} required className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-white"/>
-              <input type="text" name="title" placeholder="Project Title" value={newProject.title} onChange={handleInputChange} required className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full bg-white/40 placeholder-white"/>
-              <textarea name="description" placeholder="Project Description" value={newProject.description} onChange={handleInputChange} required rows={4} className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full resize-none bg-white/40 placeholder-white"/>
-              <input type="file" accept="video/*" onChange={handleVideoChange} required className="border border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 rounded-2xl p-3 outline-none transition w-full cursor-pointer bg-white/50 text-white"/>
-              <button type="submit" className="bg-sky-300 hover:bg-sky-500 text-white py-3 px-6 rounded-2xl font-semibold transition shadow-lg hover:shadow-xl w-full">Submit</button>
+              <input
+                type="text"
+                name="studentName"
+                placeholder="Student Name"
+                value={newProject.studentName}
+                onChange={handleInputChange}
+                required
+                className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white placeholder-white/70"
+              />
+
+              <input
+                type="text"
+                name="title"
+                placeholder="Project Title"
+                value={newProject.title}
+                onChange={handleInputChange}
+                required
+                className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white placeholder-white/70"
+              />
+
+              <textarea
+                name="description"
+                placeholder="Project Description"
+                value={newProject.description}
+                onChange={handleInputChange}
+                rows={4}
+                required
+                className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white placeholder-white/70 resize-none"
+              />
+
+              <input
+                type="file"
+                accept="video/*"
+                onChange={handleVideoChange}
+                required
+                className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white"
+              />
+
+              <button
+                type="submit"
+                className="bg-gradient-to-r from-sky-400 to-cyan-500 hover:from-sky-500 hover:to-cyan-600 text-white py-3 rounded-2xl font-semibold shadow-lg"
+              >
+                Upload Project
+              </button>
             </form>
           </div>
         </div>
@@ -403,11 +609,20 @@ export function StudentProjectsSlider() { // Added 'export'
   );
 }
 
+
+
 // ---------------- 5. StudentMarket ----------------
-export function StudentMarket() { // Changed from 'function' to 'export function'
+export function StudentMarket() {
   const texts = [
-    "Find the best student deals 🎒", "Buy or sell items easily 💰", "Connect directly with owners 📞",
+    "Find the best student deals 🎒",
+    "Buy or sell items easily 💰",
+    "Connect directly with owners 📞",
   ];
+
+  const navigate = useNavigate();
+
+  // 🔑 get logged-in user
+  const { user } = useContext(AuthContext);
 
   const [text, setText] = useState("");
   const [index, setIndex] = useState(0);
@@ -454,22 +669,28 @@ export function StudentMarket() { // Changed from 'function' to 'export function
     const search = searchTerm.toLowerCase();
     const matchesName = item.name && item.name.toLowerCase().includes(search);
     const matchesPrice = item.price && String(item.price).includes(search);
-    const matchesYear = item.yearUsed && String(item.yearUsed).toLowerCase().includes(search);
-    const matchesQuality = item.quality && String(item.quality).toLowerCase().includes(search);
+    const matchesYear =
+      item.yearUsed && String(item.yearUsed).toLowerCase().includes(search);
+    const matchesQuality =
+      item.quality && String(item.quality).toLowerCase().includes(search);
 
     return matchesName || matchesPrice || matchesYear || matchesQuality;
   });
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedItems = filteredItems.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const handleNext = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
   return (
-    <div className="font-sans mt-10 mb-14 px-6">
-      {/* 🔍 Search + Title (rest of the JSX remains the same...) */}
+    <div className="font-sans mt-10 mb-14 px-6 bg-white">
+      {/* 🔍 Search + Title */}
       <div className="flex flex-col sm:flex-row items-center mb-28 gap-10">
         <div className="w-full sm:w-[45%] max-w-[500px]">
           <div className="relative">
@@ -479,7 +700,7 @@ export function StudentMarket() { // Changed from 'function' to 'export function
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={text || "Search items..."}
               className="pl-[60px] pr-4 focus:outline-none focus:border-sky-100 focus:ring-sky-100 focus:ring-1 
-                           w-full border-[2px] h-[45px] rounded-2xl placeholder:italic"
+                         w-full border-[2px] h-[45px] rounded-2xl placeholder:italic"
             />
             <button className="absolute top-0 right-0 h-full px-5 bg-sky-200 hover:bg-sky-300 text-white rounded-e-2xl transition-all shadow-md">
               <i className="fas fa-search"></i>
@@ -491,7 +712,9 @@ export function StudentMarket() { // Changed from 'function' to 'export function
           <h2 className="text-[2rem] font-bold text-gray-700 flex items-center gap-3">
             🛒 Buy & Sell Items
           </h2>
-          <p className="text-gray-500 mt-1">Discover great deals on student products!</p>
+          <p className="text-gray-500 mt-1">
+            Discover great deals on student products!
+          </p>
         </div>
       </div>
 
@@ -513,18 +736,25 @@ export function StudentMarket() { // Changed from 'function' to 'export function
                   <span className="text-lg">{item.name}</span>
                   <span>₹ {item.price} 💰 </span>
                 </div>
+
                 <div className="flex justify-between items-end text-sm relative">
                   <div>
                     <p>🧾 {item.quality}</p>
                     <p>⏳ {item.yearUsed} Year</p>
                   </div>
+
+                  {/* 📞 Chat button — uses item phone OR logged-in user phone */}
                   <button
-                    onClick={() => alert(`📞 Call ${item.phone} to contact owner`)}
-                   className="absolute bottom-3 right-3 flex items-center gap-2 px-3 py-2 rounded-2xl
-                                bg-sky-400/70 text-white font-semibold cursor-pointer
-                                transition-all duration-300 hover:bg-sky-400/90 hover:translate-y-[-2px]"
+                    onClick={() =>
+                      navigate("/chat", {
+                        state: { phone: item.phone || user?.phone },
+                      })
+                    }
+                    className="absolute bottom-3 right-3 flex items-center gap-2 px-3 py-2 rounded-2xl
+                               bg-sky-400/70 text-white font-semibold cursor-pointer
+                               transition-all duration-300 hover:bg-sky-400/90 hover:translate-y-[-2px]"
                   >
-                    📞 {item.phone}
+                    📞 Chat
                   </button>
                 </div>
               </div>
@@ -536,50 +766,49 @@ export function StudentMarket() { // Changed from 'function' to 'export function
       </div>
 
       {/* 📄 Pagination */}
-      { (
-        <div className="flex justify-center items-center mt-20 gap-2 flex-wrap">
-          <button
-            onClick={handlePrev}
-            disabled={currentPage === 1}
-            className="px-4 py-2 rounded-md font-medium border border-gray-300 bg-white text-gray-600
-                         hover:bg-gray-100 disabled:bg-gray-100 disabled:text-gray-400 transition"
-          >
-            Previous
-          </button>
+      <div className="flex justify-center items-center mt-20 gap-2 flex-wrap">
+        <button
+          onClick={handlePrev}
+          disabled={currentPage === 1}
+          className="px-4 py-2 rounded-md font-medium border border-gray-300 bg-white text-gray-600
+                     hover:bg-gray-100 disabled:bg-gray-100 disabled:text-gray-400 transition"
+        >
+          Previous
+        </button>
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`px-4 py-2 rounded-md font-medium border transition
-                           ${
-                             currentPage === page
-                               ? "bg-sky-50 text-sky-600 border-sky-200 shadow-sm"
-                               : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
-                           }`}
-            >
-              {page}
-            </button>
-          ))}
-
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <button
-            onClick={handleNext}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 rounded-md font-medium border border-gray-300 bg-white text-gray-600
-                         hover:bg-gray-100 disabled:bg-gray-100 disabled:text-gray-400 transition"
+            key={page}
+            onClick={() => setCurrentPage(page)}
+            className={`px-4 py-2 rounded-md font-medium border transition
+              ${
+                currentPage === page
+                  ? "bg-sky-50 text-sky-600 border-sky-200 shadow-sm"
+                  : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
+              }`}
           >
-            Next
+            {page}
           </button>
-        </div>
-      )}
+        ))}
+
+        <button
+          onClick={handleNext}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 rounded-md font-medium border border-gray-300 bg-white text-gray-600
+                     hover:bg-gray-100 disabled:bg-gray-100 disabled:text-gray-400 transition"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
 
+
 // ---------------- 6. Footer ----------------
 export const Footer = () => { // Changed from 'const' to 'export const'
   return (
-    <footer style={{ width: "100%", backgroundColor: "#f5f5f5" }}>
+    <footer style={{ width: "100%", backgroundColor: "white" }}>
       <div
         style={{
           display: "flex",
@@ -604,98 +833,155 @@ export const Footer = () => { // Changed from 'const' to 'export const'
 };
 
 // ---------------- 7. SellItemModal ----------------
-  export function SellItemModal() { // Changed from 'function' to 'export function'
-    const [showModal, setShowModal] = useState(false);
+export function SellItemModal() {
+  const [showModal, setShowModal] = useState(false);
 
-    // Input States
-    const [name, setName] = useState("");
-    const [price, setPrice] = useState("");
-    const [yearUsed, setYearUsed] = useState("");
-    const [quality, setQuality] = useState("");
-    const [image, setImage] = useState(null);
-    const [phone, setPhone] = useState("");
+  // 🔑 Get logged-in user
+  const { user } = useContext(AuthContext);
 
-    // Handle Submit
-    const handleSubmit = async (e) => {
-      e.preventDefault();
+  // Input States
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [yearUsed, setYearUsed] = useState("");
+  const [quality, setQuality] = useState("");
+  const [image, setImage] = useState(null);
+  const [phone, setPhone] = useState("");
 
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("price", price);
-      formData.append("yearUsed", yearUsed);
-      formData.append("quality", quality);
-      formData.append("image", image);
-      formData.append("phone", phone);
+  // ✅ AUTO-SET PHONE FROM LOGGED-IN USER
+  useEffect(() => {
+    if (user?.phone) {
+      setPhone(user.phone);
+    }
+  }, [user]);
 
-      try {
-        const res = await fetch("http://localhost:8000/add-sell-item", {
-          method: "POST",
-          body: formData,
-        });
+  // Handle Submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        if (res.ok) {
-          alert("✅ Item uploaded successfully!");
-          // Clear form states and close modal
-          setName("");
-          setPrice("");
-          setYearUsed("");
-          setQuality("");
-          setImage(null);
-          setPhone("");
-          setShowModal(false);
-          // You might need to refresh the `StudentMarket` item list here 
-          // by calling a function passed down from the parent or by refreshing the page
-        } else {
-          alert("❌ Upload failed!");
-        }
-      } catch (error) {
-        console.error("Error uploading item:", error);
-        alert("❌ Something went wrong!");
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("price", price);
+    formData.append("yearUsed", yearUsed);
+    formData.append("quality", quality);
+    formData.append("image", image);
+
+    // ✅ always send logged-in user phone
+    formData.append("phone", user?.phone || "");
+
+    try {
+      const res = await fetch("http://localhost:8000/add-sell-item", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        alert("✅ Item uploaded successfully!");
+
+        // Clear form
+        setName("");
+        setPrice("");
+        setYearUsed("");
+        setQuality("");
+        setImage(null);
+        setShowModal(false);
+      } else {
+        alert("❌ Upload failed!");
       }
-    };
+    } catch (error) {
+      console.error("Error uploading item:", error);
+      alert("❌ Something went wrong!");
+    }
+  };
 
-    return (
-      <>
-        {/* Floating Add Button (Plus Emoji) */}
-        <button
-          onClick={() => setShowModal(true)}
-          className="fixed bottom-8 right-8 bg-gradient-to-r from-sky-400 to-cyan-500 text-white rounded-full shadow-2xl w-16 h-16 flex items-center justify-center text-3xl hover:scale-110 transition-all duration-300 animate-pulse"
-        >
-          ➕
-        </button>
+  return (
+    <>
+      {/* Floating Add Button */}
+      <button
+        onClick={() => setShowModal(true)}
+        className="fixed bottom-8 right-8 bg-gradient-to-r from-sky-400 to-cyan-500 text-white rounded-full shadow-2xl w-16 h-16 flex items-center justify-center text-3xl hover:scale-110 transition-all duration-300 animate-pulse"
+      >
+        ➕
+      </button>
 
-        {/* Modal (rest of the JSX remains the same...) */}
-        {showModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
-              {/* Close Button */}
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
+
+            {/* Close */}
+            <button
+              className="absolute top-4 right-4 text-sky-400 hover:text-sky-600 text-2xl font-bold"
+              onClick={() => setShowModal(false)}
+            >
+              ✖
+            </button>
+
+            <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
+              Sell Your Item 🛍️
+            </h3>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+
+              <input
+                type="text"
+                placeholder="Name of the Item"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"
+              />
+
+              <input
+                type="number"
+                placeholder="Price (₹)"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"
+              />
+
+              <input
+                type="text"
+                placeholder="Year Used (e.g., 2 Years)"
+                value={yearUsed}
+                onChange={(e) => setYearUsed(e.target.value)}
+                required
+                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"
+              />
+
+              <input
+                type="text"
+                placeholder="Quality (Excellent, Good, Average)"
+                value={quality}
+                onChange={(e) => setQuality(e.target.value)}
+                required
+                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"
+              />
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImage(e.target.files[0])}
+                required
+                className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white"
+              />
+
+              {/* 🚫 PHONE FIELD REMOVED FROM FORM UI */}
+              {/* Phone automatically sent from logged-in user */}
+
               <button
-                className="absolute top-4 right-4 text-sky-400 hover:text-sky-600 text-2xl font-bold transition"
-                onClick={() => setShowModal(false)}
+                type="submit"
+                className="bg-gradient-to-r from-sky-400 to-cyan-500 hover:from-sky-500 hover:to-cyan-600 text-white py-3 rounded-2xl font-semibold transition shadow-lg"
               >
-                ✖
+                Upload Item
               </button>
-
-              <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
-                Sell Your Item 🛍️
-              </h3>
-
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                {/* Input fields */}
-                <input type="text" placeholder="Name of the Item" value={name} onChange={(e) => setName(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
-                <input type="number" placeholder="Price (₹)" value={price} onChange={(e) => setPrice(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
-                <input type="text" placeholder="Year Used (e.g., 2 Years)" value={yearUsed} onChange={(e) => setYearUsed(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
-                <input type="text" placeholder="Quality (Excellent, Good, Average)" value={quality} onChange={(e) => setQuality(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
-                <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white"/>
-                <input type="tel" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} required className="border border-sky-300 rounded-2xl p-3 outline-none bg-white/30 text-white placeholder-white/70"/>
-                
-                <button type="submit" className="bg-gradient-to-r from-sky-400 to-cyan-500 hover:from-sky-500 hover:to-cyan-600 text-white py-3 rounded-2xl font-semibold transition shadow-lg">Upload Item</button>
-              </form>
-            </div>
+            </form>
           </div>
-        )}
-      </>
-    );
-  }
+        </div>
+      )}
+    </>
+  );
+}
+
 
 // REMOVE THIS LINE: export default StudentMarket;
