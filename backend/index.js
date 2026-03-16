@@ -22,7 +22,7 @@ app.use(cors());
 app.use(express.json()); 
 
 // ----------------- Groq/OpenAI (if used) -----------------
-const GROQ_API_KEY = "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" || "";
+const GROQ_API_KEY =  "";
 let openai;
 if (GROQ_API_KEY) {
   openai = new OpenAI({ apiKey: GROQ_API_KEY, baseURL: "https://api.groq.com/openai/v1" });
