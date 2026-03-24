@@ -67,7 +67,7 @@ function Header() {
   return (
     <>
       {/* --- Main Navigation Bar --- */}
-      <div className="flex items-center justify-evenly flex-wrap gap-4 bg-white p-1 shadow">
+<div className="flex items-center justify-evenly flex-wrap gap-4 bg-white p-1 border-b border-gray-200 shadow-sm">
         <div className="logo-container flex items-center gap-2">
           <img src={logo} className="Logo w-12 h-12 rounded-full" alt="Logo" />
           <div className="logo-title text-sky-700">Aryavarta Mitra</div>

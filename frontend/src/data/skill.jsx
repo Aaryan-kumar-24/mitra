@@ -1,162 +1,329 @@
-    const skillsData = {
-    "skills": [
-        {
-        "name": "Web Development",
-        "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80",
-        "description": "Learn to build responsive and interactive websites using HTML, CSS, JavaScript, and frameworks. Create modern websites with user-friendly designs.",
-        "cards": [
-            { "title": "What is this skill?", "content": "Creating interactive websites using HTML, CSS, and JavaScript for responsive, visually appealing, and optimized applications." },
-            { "title": "Why learn it?", "content": "Web development offers huge career opportunities with high demand, letting you build impactful digital experiences globally." },
-            { "title": "Prerequisites", "content": "Basic computer knowledge, familiarity with the internet, and interest in programming and design principles." },
-            { "title": "Learning Time", "content": "About 3–6 months with consistent practice to master fundamentals and build real projects." }
-        ],
-"resources": [
-  {
-    "title": "Web Development in Hindi – CodeHelp (Love Babbar)",
-    "link": "https://www.youtube.com/watch?v=Vi9bxu-M-ag",
-    "description": "Complete web development introduction with roadmap and basics in Hindi.",
-    "thumbnail": "https://img.youtube.com/vi/Vi9bxu-M-ag/maxresdefault.jpg",
-    "type": "YouTube Video",
-    "duration": "3h"
-  },
-  {
-    "title": "HTML Crash Course in Hindi – Hitesh Choudhary",
-    "link": "https://www.youtube.com/watch?v=kUMe1FH4CHE",
-    "description": "Beginner-friendly HTML crash course explained in simple Hindi.",
-    "thumbnail": "https://img.youtube.com/vi/kUMe1FH4CHE/maxresdefault.jpg",
-    "type": "YouTube Video",
-    "duration": "1.5h"
-  },
-  {
-    "title": "JavaScript Full Course in Hindi – Clever Programmer",
-    "link": "https://www.youtube.com/watch?v=Qqx_wzMmFeA",
-    "description": "JavaScript from scratch with practical coding examples.",
-    "thumbnail": "https://img.youtube.com/vi/Qqx_wzMmFeA/maxresdefault.jpg",
-    "type": "YouTube Video",
-    "duration": "8h"
-  },
-  {
-    "title": "CSS Complete Tutorial in Hindi – Tech Gun",
-    "link": "https://www.youtube.com/watch?v=1PnVor36_40",
-    "description": "CSS basics to advanced including layouts and styling concepts.",
-    "thumbnail": "https://img.youtube.com/vi/1PnVor36_40/maxresdefault.jpg",
-    "type": "YouTube Video",
-    "duration": "5h"
-  },
-  {
-    "title": "JavaScript Projects in Hindi – GreatStack",
-    "link": "https://www.youtube.com/watch?v=EWv2jnhZErc",
-    "description": "Build beginner-friendly JavaScript projects with explanations.",
-    "thumbnail": "https://img.youtube.com/vi/EWv2jnhZErc/maxresdefault.jpg",
-    "type": "YouTube Video",
-    "duration": "2.5h"
-  },
-  {
-    "title": "Web Development Roadmap in Hindi – Apna College (Shradha Khapra)",
-    "link": "https://www.youtube.com/watch?v=ZxKM3DCV2kE",
-    "description": "Clear and beginner-friendly full-stack web development roadmap in Hindi.",
-    "thumbnail": "https://img.youtube.com/vi/ZxKM3DCV2kE/maxresdefault.jpg",
-    "type": "YouTube Video",
-    "duration": "1h"
-  },
-  {
-    "title": "Bootstrap Tutorial in Hindi – LearnVern",
-    "link": "https://www.youtube.com/watch?v=vpAJ0s5S2t0",
-    "description": "Bootstrap basics for responsive web design in Hindi.",
-    "thumbnail": "https://img.youtube.com/vi/vpAJ0s5S2t0/maxresdefault.jpg",
-    "type": "YouTube Video",
-    "duration": "4h"
-  },
-  {
-    "title": "PHP for Web Development in Hindi – Geeky Shows",
-    "link": "https://www.youtube.com/watch?v=6EukZDFE_Zg",
-    "description": "Server-side web development using PHP explained in Hindi.",
-    "thumbnail": "https://img.youtube.com/vi/6EukZDFE_Zg/maxresdefault.jpg",
-    "type": "YouTube Video",
-    "duration": "6h"
-  }
-]
-,
-        "roadmap": [
-            { "step": "Step 1", "title": "Learn HTML", "desc": "Understand HTML structure, semantic tags, forms, and accessibility. Build static pages.", "color": "bg-green-500" },
-            { "step": "Step 2", "title": "Master CSS", "desc": "Learn selectors, box model, flexbox, grid layouts, animations, and responsive design.", "color": "bg-green-500" },
-            { "step": "Step 3", "title": "JavaScript Basics", "desc": "Understand variables, functions, DOM manipulation, events, ES6+, and asynchronous JavaScript.", "color":"bg-green-500"  },
-            { "step": "Step 4", "title": "Frontend Frameworks", "desc": "Learn frameworks like React.js or Vue.js for dynamic, component-based UI.", "color":"bg-green-500"  },
-            { "step": "Step 5", "title": "Backend Basics", "desc": "Learn Node.js, Express.js, and REST APIs for front-end and database integration.", "color": "bg-green-500" },
-            { "step": "Step 6", "title": "Deploy & Optimize", "desc": "Deploy apps using Netlify, Vercel, or AWS, and optimize performance.", "color":"bg-green-500" }
-        ]
-        },
-        {
-        "name": "Artificial Intelligence",
-        "image": "https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=800&q=80",
-        "description": "Dive into machine learning, deep learning, and AI frameworks. Build intelligent applications revolutionizing industries.",
-        "cards": [
-            { "title": "What is this skill?", "content": "AI uses machine learning and neural networks to create systems capable of intelligent, human-like decision-making and automation." },
-            { "title": "Why learn it?", "content": "AI is transforming industries with automation, innovation, and intelligent systems, offering high-demand career opportunities globally." },
-            { "title": "Prerequisites", "content": "Basic Python knowledge, math fundamentals, problem-solving skills, and interest in algorithms and data science." },
-            { "title": "Learning Time", "content": "Around 4–8 months of structured learning and hands-on practice to build AI proficiency." }
-        ],
-        "resources": [
-            { "title": "Intro to AI", "link": "https://www.coursera.org/learn/ai-for-everyone", "description": "Learn AI fundamentals and its real-world applications.", "thumbnail": "https://miro.medium.com/max/1400/1*V3V5K-HXnIaD3r4tH4DNCA.png", "type": "Online Course", "duration": "4h" },
-            { "title": "Python for AI", "link": "https://www.datacamp.com/courses/intro-to-python-for-data-science", "description": "Python essentials for AI and ML.", "thumbnail": "https://static.datacamp.com/main/images/logos/datacamp-logo.svg", "type": "Online Course", "duration": "6h" },
-            { "title": "Machine Learning Crash Course", "link": "https://developers.google.com/machine-learning/crash-course", "description": "Google's free machine learning course.", "thumbnail": "https://developers.google.com/static/ml/images/ml-logo.png", "type": "Documentation", "duration": "15h" }
-        ],
-        "roadmap": [
-            { "step": "Step 1", "title": "Learn Python", "desc": "Understand Python syntax, data types, and libraries like NumPy and Pandas.", "color": "bg-blue-500" },
-            { "step": "Step 2", "title": "Machine Learning Basics", "desc": "Learn supervised/unsupervised learning, classification, regression, clustering.", "color": "bg-green-500" },
-            { "step": "Step 3", "title": "Deep Learning", "desc": "Understand neural networks, CNNs, RNNs, and frameworks like TensorFlow/PyTorch.", "color":"bg-blue-500" },
-            { "step": "Step 4", "title": "NLP & Computer Vision", "desc": "Study Natural Language Processing and computer vision techniques.", "color":"bg-green-500" },
-            { "step": "Step 5", "title": "AI Ethics", "desc": "Learn ethical concerns, bias, and safe AI design.", "color":"bg-blue-500" },
-            { "step": "Step 6", "title": "Deploy AI Models", "desc": "Deploy models using cloud services and APIs.", "color":"bg-green-500" }
-        ]
-        },
-        {
-        "name": "Cloud Computing",
-        "image": "https://images.unsplash.com/photo-1535223289827-42f1e9919769?auto=format&fit=crop&w=800&q=80",
-        "description": "Learn cloud architecture, services, and deployment. Build scalable apps using AWS, Azure, and GCP.",
-        "cards": [
-            { "title": "What is this skill?", "content": "Cloud computing delivers scalable services like storage, servers, and apps via the internet for efficiency and reliability." },
-            { "title": "Why learn it?", "content": "Cloud skills are essential for modern businesses, offering scalability, flexibility, cost savings, and growing career opportunities." },
-            { "title": "Prerequisites", "content": "Basic networking, operating systems knowledge, and interest in cloud services and infrastructure." },
-            { "title": "Learning Time", "content": "About 4–6 months of guided learning and hands-on projects to master cloud platforms." }
-        ],
-        "resources": [
-            { "title": "AWS Fundamentals", "link": "https://aws.amazon.com/training/intro_series/", "description": "Beginner-friendly AWS training.", "thumbnail": "https://d1.awsstatic.com/logos/aws-logo-lockups/powered-by-aws/PoweredbyAWS_Logo_1000px.8f9e9c8ff82ec6f4fa9a6c2fbc2b56a4b5367b3a.png", "type": "Official AWS Course", "duration": "5h" },
-            { "title": "Google Cloud Essentials", "link": "https://cloud.google.com/training/cloud-essentials", "description": "Get started with Google Cloud Platform.", "thumbnail": "https://cloud.google.com/images/social-icon-google-cloud-1200-630.png", "type": "Official Course", "duration": "6h" }
-        ],
-        "roadmap": [
-            { "step": "Step 1", "title": "Cloud Computing Basics", "desc": "Understand cloud concepts, IaaS/PaaS/SaaS models.", "color": "bg-blue-500" },
-            { "step": "Step 2", "title": "AWS Core Services", "desc": "Learn EC2, S3, Lambda, and other AWS services.", "color": "bg-green-500" },
-            { "step": "Step 3", "title": "Azure Basics", "desc": "Understand Azure core offerings and services.", "color": "bg-blue-500" },
-            { "step": "Step 4", "title": "Google Cloud Platform", "desc": "Learn GCP basics and core services.", "color": "bg-green-500" },
-            { "step": "Step 5", "title": "Cloud Security", "desc": "Learn cloud security principles and compliance.", "color": "bg-blue-500" },
-            { "step": "Step 6", "title": "Deploy Cloud Applications", "desc": "Deploy scalable apps using cloud platforms.", "color": "bg-green-500" }
-        ]
-        },
-        {
-        "name": "Database Management",
-        "image": "https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=800&q=80",
-        "description": "Learn database design, schema optimization, SQL queries, and transaction management for robust storage solutions.",
-        "cards": [
-            { "title": "What is this skill?", "content": "Database management is organizing, storing, and retrieving data efficiently using relational and non-relational systems." },
-            { "title": "Why learn it?", "content": "Essential for backend, data analysis, and business intelligence, offering career opportunities in data-driven industries." },
-            { "title": "Prerequisites", "content": "Basic knowledge of data structures, SQL, and problem-solving skills to work with databases effectively." },
-            { "title": "Learning Time", "content": "Around 3–6 months to master database design, querying, and optimization skills." }
-        ],
-        "resources": [
-            { "title": "SQL Basics", "link": "https://www.w3schools.com/sql/", "description": "Learn SQL queries, joins, and indexing.", "thumbnail": "https://www.w3schools.com/images/w3schools.png", "type": "Website", "duration": "Ongoing" },
-            { "title": "Database Design Fundamentals", "link": "https://www.coursera.org/learn/database-management", "description": "Learn database design concepts and best practices.", "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Coursera_logo.svg", "type": "Online Course", "duration": "8h" }
-        ],
-        "roadmap": [
-            { "step": "Step 1", "title": "Learn SQL Basics", "desc": "Understand queries, joins, indexes, and constraints.", "color": "bg-blue-500" },
-            { "step": "Step 2", "title": "Advanced SQL", "desc": "Learn stored procedures, triggers, optimization.", "color": "bg-green-500" },
-            { "step": "Step 3", "title": "Database Design", "desc": "Design normalized relational databases.", "color": "bg-blue-500" },
-            { "step": "Step 4", "title": "NoSQL Databases", "desc": "Learn MongoDB, Cassandra, and use cases.", "color": "bg-green-500" },
-            { "step": "Step 5", "title": "Database Security", "desc": "Understand encryption, authentication, and access control.", "color": "bg-blue-500" },
-            { "step": "Step 6", "title": "Performance Tuning", "desc": "Learn indexing strategies, query optimization, and caching.", "color": "bg-green-500" }
-        ]
-        }
-    ]
-    };
+const skillsData = {
+  skills: [
+    {
+      name: "Web Development",
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+      description: "Design and build modern responsive websites and full-stack applications used by millions worldwide.",
+      level: "Beginner → Advanced",
+      time: "3-6 Months",
+      prerequisites: "HTML, CSS Basics",
+      why: "High demand + freelancing + startups",
 
-    export default skillsData;
+      roles: "Frontend Dev, Backend Dev, Full Stack Dev",
+      salary: "₹4L - ₹15L per year",
+      tools: "React, Node.js, MongoDB, Git",
+      demand: "Very High 🚀",
+
+      notes: [
+        { title: "Beginner HTML & CSS Notes", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Advanced React Guide", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Interview Questions", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Quick Revision Sheet", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+
+      resources: [
+        { title: "Web Dev Roadmap", link: "https://www.youtube.com/embed/ZxKM3DCV2kE", duration: "1h" },
+        { title: "React Course", link: "https://www.youtube.com/embed/Ke90Tje7VS0", duration: "10h" },
+        { title: "JavaScript", link: "https://www.youtube.com/embed/jS4aFq5-91M", duration: "8h" },
+        { title: "CSS", link: "https://www.youtube.com/embed/3PHXvlpOkf4", duration: "5h" }
+      ]
+    },
+
+    {
+      name: "Artificial Intelligence",
+      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
+      description: "Create intelligent systems that can learn, reason, and make decisions like humans.",
+      level: "Intermediate",
+      time: "6-9 Months",
+      prerequisites: "Python, Linear Algebra",
+      why: "Future of technology",
+
+      roles: "AI Engineer, Researcher, ML Engineer",
+      salary: "₹8L - ₹30L per year",
+      tools: "Python, TensorFlow, PyTorch",
+      demand: "Extremely High 🔥",
+
+      notes: [
+        { title: "AI Basics Notes", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Deep Learning Guide", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "AI Interview Prep", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "AI Quick Revision", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+
+      resources: [
+        { title: "AI Course", link: "https://www.youtube.com/embed/aircAruvnKk", duration: "4h" },
+        { title: "Neural Networks", link: "https://www.youtube.com/embed/aircAruvnKk", duration: "3h" },
+        { title: "Deep Learning", link: "https://www.youtube.com/embed/tPYj3fFJGjk", duration: "5h" },
+        { title: "AI Projects", link: "https://www.youtube.com/embed/7eh4d6sabA0", duration: "2h" }
+      ]
+    },
+
+    {
+      name: "Machine Learning",
+      image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c",
+      description: "Build predictive models and intelligent algorithms using data-driven approaches.",
+      level: "Intermediate",
+      time: "5-8 Months",
+      prerequisites: "Python, Statistics",
+      why: "Core AI skill",
+
+      roles: "ML Engineer, Data Scientist",
+      salary: "₹6L - ₹25L per year",
+      tools: "Scikit-learn, TensorFlow, Pandas",
+      demand: "Very High 🔥",
+
+      notes: [
+        { title: "ML Basics", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Advanced ML", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "ML Interview Prep", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "ML Revision", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+
+      resources: [
+        { title: "ML Course", link: "https://www.youtube.com/embed/ukzFI9rgwfU", duration: "10h" },
+        { title: "ML Basics", link: "https://www.youtube.com/embed/GwIo3gDZCVQ", duration: "2h" },
+        { title: "Projects", link: "https://www.youtube.com/embed/i_LwzRVP7bg", duration: "3h" },
+        { title: "ML Math", link: "https://www.youtube.com/embed/JcI5E2Ng6r4", duration: "2h" }
+      ]
+    },
+
+    {
+      name: "Data Science",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
+      description: "Analyze data, generate insights, and drive decisions using statistics and visualization.",
+      level: "Beginner → Intermediate",
+      time: "6 Months",
+      prerequisites: "Python",
+      why: "High salary + demand",
+
+      roles: "Data Analyst, Data Scientist",
+      salary: "₹5L - ₹20L per year",
+      tools: "Python, Pandas, Power BI",
+      demand: "Very High 🚀",
+
+      notes: [
+        { title: "Data Science Basics", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Advanced Analytics", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "DS Interview Prep", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "DS Revision", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+
+      resources: [
+        { title: "Full Course", link: "https://www.youtube.com/embed/X3paOmcrTjQ", duration: "12h" },
+        { title: "Python DS", link: "https://www.youtube.com/embed/r-uOLxNrNk8", duration: "6h" },
+        { title: "Visualization", link: "https://www.youtube.com/embed/a9UrKTVEeZA", duration: "3h" },
+        { title: "Projects", link: "https://www.youtube.com/embed/ua-CiDNNj30", duration: "2h" }
+      ]
+    },
+
+    {
+      name: "Cyber Security",
+      image: "https://images.unsplash.com/photo-1510511459019-5dda7724fd87",
+      notes: [
+        { title: "Cyber Basics", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Ethical Hacking", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Security Interview", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Quick Revision", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+      description: "Protect systems, networks, and data from cyber threats and attacks.",
+      level: "Intermediate",
+      time: "6 Months",
+      prerequisites: "Networking",
+      why: "Critical industry need",
+      roles: "Security Analyst, Ethical Hacker",
+      salary: "₹6L - ₹22L per year",
+      tools: "Kali Linux, Wireshark, Metasploit",
+      demand: "Very High 🔥",
+      resources: [
+        { title: "Cyber Course", link: "https://www.youtube.com/embed/inWWhr5tnEA", duration: "3h" },
+        { title: "Ethical Hacking", link: "https://www.youtube.com/embed/3Kq1MIfTWCE", duration: "5h" },
+        { title: "Network Security", link: "https://www.youtube.com/embed/U_P23SqJaDc", duration: "4h" },
+        { title: "Tools", link: "https://www.youtube.com/embed/lXKDu6cdXLI", duration: "2h" }
+      ]
+    },
+
+    {
+      name: "Cloud Computing",
+      image: "https://images.unsplash.com/photo-1535223289827-42f1e9919769",
+      description: "Deploy and manage scalable applications using cloud platforms.",
+      level: "Intermediate",
+      time: "4-6 Months",
+      prerequisites: "Networking",
+      why: "Used everywhere",
+      roles: "Cloud Engineer, DevOps Engineer",
+      salary: "₹6L - ₹25L per year",
+      tools: "AWS, Azure, Docker",
+      demand: "Extremely High 🚀",
+      notes: [
+        { title: "Cloud Basics", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "AWS Guide", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Cloud Interview", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Cloud Revision", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+      resources: [
+        { title: "AWS Course", link: "https://www.youtube.com/embed/ulprqHHWlng", duration: "3h" },
+        { title: "Azure", link: "https://www.youtube.com/embed/NKEFWyqJ5XA", duration: "4h" },
+        { title: "Docker", link: "https://www.youtube.com/embed/fqMOX6JJhGo", duration: "3h" },
+        { title: "Kubernetes", link: "https://www.youtube.com/embed/X48VuDVv0do", duration: "5h" }
+      ]
+    },
+
+    {
+      name: "DevOps",
+      image: "https://images.unsplash.com/photo-1605379399642-870262d3d051",
+      description: "Automate workflows and CI/CD pipelines.",
+      level: "Intermediate",
+      time: "4 Months",
+      prerequisites: "Linux",
+      why: "Automation",
+      roles: "DevOps Engineer",
+      salary: "₹7L - ₹25L",
+      tools: "Docker, Jenkins",
+      demand: "High 🔥",
+      notes: [
+        { title: "DevOps Basics", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "CI/CD Guide", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "DevOps Interview", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "DevOps Revision", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+      resources: [
+        { title: "DevOps Course", link: "https://www.youtube.com/embed/j5Zsa_eOXeY", duration: "5h" },
+        { title: "CI/CD", link: "https://www.youtube.com/embed/1er2cjUq1UI", duration: "3h" },
+        { title: "Docker", link: "https://www.youtube.com/embed/fqMOX6JJhGo", duration: "3h" },
+        { title: "K8s", link: "https://www.youtube.com/embed/X48VuDVv0do", duration: "4h" }
+      ]
+    },
+
+    {
+      name: "Blockchain",
+      image: "https://images.unsplash.com/photo-1621761191319-c6fb62004040",
+      description: "Build decentralized apps.",
+      level: "Advanced",
+      time: "5 Months",
+      prerequisites: "Programming",
+      why: "Future finance",
+      roles: "Blockchain Dev",
+      salary: "₹8L - ₹30L",
+      tools: "Solidity",
+      demand: "High 🚀",
+      notes: [
+        { title: "Blockchain Basics", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Smart Contracts", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Blockchain Interview", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Blockchain Revision", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+      resources: [
+        { title: "Blockchain", link: "https://www.youtube.com/embed/SSo_EIwHSd4", duration: "2h" },
+        { title: "Smart Contracts", link: "https://www.youtube.com/embed/M576WGiDBdQ", duration: "3h" },
+        { title: "Web3", link: "https://www.youtube.com/embed/gyMwXuJrbJQ", duration: "4h" },
+        { title: "Projects", link: "https://www.youtube.com/embed/coQ5dg8wM2o", duration: "2h" }
+      ]
+    },
+
+    {
+      name: "Android Development",
+      image: "https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb",
+      description: "Build Android apps.",
+      level: "Beginner",
+      time: "4 Months",
+      prerequisites: "Java/Kotlin",
+      why: "Huge demand",
+      roles: "Android Dev",
+      salary: "₹4L - ₹18L",
+      tools: "Kotlin",
+      demand: "High 🚀",
+      notes: [
+        { title: "Android Basics", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Advanced Android", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Android Interview", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Android Revision", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+      resources: [
+        { title: "Android", link: "https://www.youtube.com/embed/fis26HvvDII", duration: "8h" },
+        { title: "Kotlin", link: "https://www.youtube.com/embed/F9UC9DY-vIU", duration: "3h" },
+        { title: "UI", link: "https://www.youtube.com/embed/xWV71C2kp38", duration: "2h" },
+        { title: "Projects", link: "https://www.youtube.com/embed/BBWyXo-3JGQ", duration: "2h" }
+      ]
+    },
+
+    {
+      name: "UI UX Design",
+      image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e",
+      description: "Design user experiences.",
+      level: "Beginner",
+      time: "3 Months",
+      prerequisites: "Creativity",
+      why: "Product success",
+      roles: "UI Designer",
+      salary: "₹4L - ₹15L",
+      tools: "Figma",
+      demand: "High 🚀",
+      notes: [
+        { title: "UI UX Basics", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Figma Guide", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "UX Interview", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Design Revision", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+      resources: [
+        { title: "UI UX", link: "https://www.youtube.com/embed/c9Wg6Cb_YlU", duration: "3h" },
+        { title: "Figma", link: "https://www.youtube.com/embed/FTFaQWZBqQ8", duration: "2h" },
+        { title: "UX Research", link: "https://www.youtube.com/embed/Ovj4hFxko7c", duration: "2h" },
+        { title: "Design Systems", link: "https://www.youtube.com/embed/7vVqY6M9d1U", duration: "2h" }
+      ]
+    },
+
+    {
+      name: "Data Structures",
+      image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4",
+      description: "Master algorithms.",
+      level: "Intermediate",
+      time: "4 Months",
+      prerequisites: "Programming",
+      why: "Placement key",
+      roles: "Software Engineer",
+      salary: "₹5L - ₹25L",
+      tools: "C++, Java",
+      demand: "High 🔥",
+      notes: [
+        { title: "DSA Basics", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Advanced Algorithms", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "DSA Interview", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "DSA Revision", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+      resources: [
+        { title: "DSA", link: "https://www.youtube.com/embed/8hly31xKli0", duration: "8h" },
+        { title: "Algorithms", link: "https://www.youtube.com/embed/0IAPZzGSbME", duration: "6h" },
+        { title: "Practice", link: "https://www.youtube.com/embed/1fV8z7QYy4U", duration: "3h" },
+        { title: "Interview", link: "https://www.youtube.com/embed/2ZLl8GAk1X4", duration: "2h" }
+      ]
+    },
+
+    {
+      name: "Internet of Things",
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475",
+      description: "Build smart devices.",
+      level: "Intermediate",
+      time: "5 Months",
+      prerequisites: "Electronics",
+      why: "Future tech",
+      roles: "IoT Engineer",
+      salary: "₹5L - ₹18L",
+      tools: "Arduino",
+      demand: "Growing 🚀",
+      notes: [
+        { title: "IoT Basics", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "Sensors Guide", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "IoT Interview", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+        { title: "IoT Revision", link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+      ],
+      resources: [
+        { title: "IoT Course", link: "https://www.youtube.com/embed/LlhmzVL5bm8", duration: "2h" },
+        { title: "Arduino", link: "https://www.youtube.com/embed/zJ-LqeX_fLU", duration: "3h" },
+        { title: "Projects", link: "https://www.youtube.com/embed/5qap5aO4i9A", duration: "2h" },
+        { title: "Sensors", link: "https://www.youtube.com/embed/t0gGdH3sRrE", duration: "2h" }
+      ]
+    }
+  ]
+};
+
+export default skillsData;

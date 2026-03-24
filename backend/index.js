@@ -414,6 +414,44 @@ app.get("/search-user/:phone", authMiddleware, async (req, res) => {
   res.json(user);
 });
 
+
+
+// 🔥 AI ROADMAP ROUTE
+app.get("/api/roadmap/:skill", async (req, res) => {
+  try {
+    const skill = req.params.skill;
+
+    const response = await fetch(
+      `http://localhost:8001/generate_roadmap?skill=${encodeURIComponent(skill)}`
+    );
+
+    const data = await response.json();
+
+    res.json(data);
+  } catch (err) {
+    console.error("Roadmap error:", err);
+    res.status(500).json({ message: "Failed to fetch roadmap" });
+  }
+});
+
+app.get("/api/topic/:topic", async (req, res) => {
+  try {
+    const topic = req.params.topic;
+
+    const response = await fetch(
+      `http://localhost:8001/generate_topic?topic=${encodeURIComponent(topic)}`
+    );
+
+    const data = await response.json();
+
+    res.json(data);
+  } catch (err) {
+    console.error("Topic error:", err);
+    res.status(500).json({ message: "Failed to fetch topic" });
+  }
+});
+
+
 // ----------------- DB + Socket.io start (unchanged) -----------------
 const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://amankumarjanuary_db_user:24012004@cluster0.v5mq8wb.mongodb.net/";
 mongoose

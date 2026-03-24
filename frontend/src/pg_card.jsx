@@ -100,17 +100,17 @@ function Pgcard({ data }) {
       className="inline-block bg-base-100 w-[300px] shadow-lg rounded-2xl ml-[50px] m-[20px] gap-[20px] hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
     >
       {state && (
-        
+                  
+<Link to={`/pg/${data.id}`}>
         <button
           className="flex items-center view pl-[8px] pe-[8px] ml-[8px] mt-[6px] gap-2 text-[0.85rem] h-[30px] px-3 text-sky-600 bg-sky-50 rounded-lg"
         >
           <i className="fas fa-eye"></i>
-          
-<Link to={`/pg/${data.id}`}>
+
   More
-</Link>
 
         </button>
+</Link>
       )}
       <div className="head">
         <img

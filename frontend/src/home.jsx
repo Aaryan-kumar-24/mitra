@@ -19,7 +19,7 @@ import shops from "./image/shops.jpg";
 import skills from "./image/skills.jpg";
 import chatbot from "./image/chatbot.jpg";
 import events from "./image/collegeevents.avif";
-
+import { Footer } from "./footer";
 import cartoon from "./image/cartoon.png";
 
 
@@ -249,7 +249,7 @@ const features = [
 
   return (
 <section className="py-12 bg-white">
-  <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">
+  <h1 className="text-[3rem] font-bold text-center mb-12 text-gray-800">
     <i className="fas fa-users mr-10"></i> Features We Provide
   </h1>
 
@@ -382,231 +382,247 @@ export function StudentProjectsSlider() {
     }
   };
 
-  const cardWidth = 40;
-  const cardHeight = 20;
+  const cardWidth = 68;
+  const cardHeight = 36;
 
-  return (
-    <section className="py-16 bg-white relative">
+return (
+  <section className="bg-white py-6">
 
-      {/* 🔍 SEARCH BAR */}
-{/* 🔍 SEARCH BAR */}
-<div className="absolute top-22 left-10 w-[420px] z-20">
-  <div className="relative">
-    <input
-      type="text"
-      value={search}
-      placeholder="Search project title..."
-      onChange={(e) => setSearch(e.target.value)}
-      onFocus={() => setShowResults(true)}
-      onBlur={() => setTimeout(() => setShowResults(false), 150)}
-      className="pl-[60px] pr-4 w-full border-[2px] h-[45px] rounded-2xl
-                 bg-white backdrop-blur-md text-gray-700 placeholder-gray-400
-                 focus:outline-none focus:ring-1 focus:ring-sky-200"
-    />
+    {/* 🔝 HEADER */}
+    <div className="max-w-7xl mx-auto mt-[100px] flex items-center justify-between px-6 py-3">
 
-    <button className="absolute top-0 right-0 h-full px-5
-                       bg-sky-200
-                       text-white rounded-e-2xl backdrop-blur-md transition">
-      <i className="fas fa-search"></i>
-    </button>
-  </div>
-
-  {/* 🌫 Glass Dropdown */}
-  {showResults && (
-    <div className="mt-2 rounded-2xl shadow-2xl max-h-56 overflow-y-auto
-                    bg-white/70 backdrop-blur-xl border border-gray-200">
-
-      {filteredTitles.length > 0 ? (
-        filteredTitles.map((p, i) => {
-          const realIndex = projects.findIndex(
-            (proj) => proj.title === p.title
-          );
-
-          return (
-            <div
-              key={i}
-              onClick={() => openProject(realIndex)}
-              className="px-5 py-3 cursor-pointer text-gray-700
-                         hover:bg-gray-100/70 transition"
-            >
-              {p.title}
-            </div>
-          );
-        })
-      ) : (
-        <div className="px-5 py-3 text-gray-400 text-sm">
-          No project found
-        </div>
-      )}
-    </div>
-  )}
-</div>
-
-
-      {/* 🖼 Cartoon with MORE left margin */}
-      <img
-        src={cartoon}
-        alt="cartoon"
-        className="absolute top-[140px] left-[70px] w-[390px] h-[390px]"
-      />
-
-      {/* 🎓 Title */}
-      <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+      <h2 className="text-[3rem] font-extrabold text-gray-800">
         🎓 Student Projects Showcase
       </h2>
 
-      {/* ➕ Upload Button */}
+      {/* 🔍 SEARCH */}
+      <div className="w-[380px] relative">
+        <input
+          type="text"
+          value={search}
+          placeholder="Search project title..."
+          onChange={(e) => setSearch(e.target.value)}
+          onFocus={() => setShowResults(true)}
+          onBlur={() => setTimeout(() => setShowResults(false), 150)}
+          className="pl-4 pr-14 w-full h-[48px] rounded-2xl
+                     bg-white/70 backdrop-blur-md border border-gray-200
+                     text-gray-700 placeholder-gray-400
+                     focus:outline-none focus:ring-2 focus:ring-sky-200 shadow-md"
+        />
+
+        <button className="absolute right-0 top-0 h-full px-5 bg-sky-300 text-white rounded-e-2xl">
+                  <i className="fas fa-search"></i>
+        </button>
+
+        {/* DROPDOWN */}
+        {showResults && (
+          <div className="absolute w-full mt-2 rounded-2xl shadow-xl max-h-56 overflow-y-auto
+                          bg-white/70 backdrop-blur-xl border border-gray-200 z-50">
+
+            {filteredTitles.length > 0 ? (
+              filteredTitles.map((p, i) => {
+                const realIndex = projects.findIndex(
+                  (proj) => proj.title === p.title
+                );
+
+                return (
+                  <div
+                    key={i}
+                    onClick={() => {
+                      openProject(realIndex);
+                      setSearch(p.title);
+                    }}
+                    className="px-5 py-3 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {p.title}
+                  </div>
+                );
+              })
+            ) : (
+              <div className="px-5 py-3 text-gray-400 text-sm">
+                No project found
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* ➕ UPLOAD */}
+    <div className="max-w-6xl mx-auto px-6 mr-[-2px] mt-[-70px] flex justify-end">
       <button
         onClick={() => setShowModal(true)}
-        className="absolute left-[650px] top-[200px] bg-blue-300 hover:bg-blue-400
-                   text-white py-3 px-4 rounded-full shadow-lg z-20"
+        className="bg-gradient-to-r from-sky-300 to-cyan-400
+                   text-white px-6 py-2 rounded-full shadow-md"
       >
         <i className="fas fa-upload"></i>
       </button>
+    </div>
 
-      {/* 🎞 Slider */}
-      <div className="relative w-full flex justify-center items-center">
+    {/* 🎞 SLIDER */}
+    <div className="relative max-w-7xl mx-auto mt-10 flex items-center justify-center">
 
-        {/* Left Arrow */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-[650px] top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full z-10"
-        >
-          ❮
-        </button>
-
-        {/* Cards */}
-        <div className="relative w-full max-w-7xl flex justify-end h-[28rem]">
-          {projects.map((proj, index) => {
-            let offset = index - currentIndex;
-            if (offset < -Math.floor(projects.length / 2)) offset += projects.length;
-            if (offset > Math.floor(projects.length / 2)) offset -= projects.length;
-
-            const scale = offset === 0 ? 1 : 0.75;
-            const translateX = offset * (cardWidth * 0.6);
-            const zIndex = offset === 0 ? 10 : 5;
-
-            const videoUrl = `http://localhost:8000/video/${proj.videoUrl.split("/").pop()}`;
-
-            return (
-              <div
-                key={index}
-                className="absolute top-0 rounded-2xl shadow-2xl overflow-hidden"
-                style={{
-                  width: `${cardWidth}rem`,
-                  height: `${cardHeight}rem`,
-                  transform: `translateX(${translateX}px) scale(${scale})`,
-                  zIndex,
-                  backgroundColor: "#000",
-                }}
-              >
-                <video
-                  src={videoUrl}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
-
-                <div className="absolute inset-0 bg-black/20" />
-
-                <div className="relative z-10 p-6 text-white h-full flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-2xl font-bold">{proj.title}</h3>
-                    <p className="mt-2 text-sm">{proj.description}</p>
-                  </div>
-
-                  <button
-                    onClick={() =>
-                      navigate("/chat", { state: { phone: proj.phone } })
-                    }
-                    className="self-end bg-sky-400/80 px-3 py-2 rounded-xl"
-                  >
-                    Connect
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+      {/* ⛔ HANDLE EMPTY STATE */}
+      {projects.length === 0 ? (
+        <div className="h-[300px] flex items-center justify-center text-gray-400 text-lg">
+          Loading projects...
         </div>
+      ) : (
+        <>
+          {/* LEFT */}
+          <button
+            onClick={prevSlide}
+            className="absolute -left-16 bg-black/50 hover:bg-black/70 text-white p-5 rounded-full"
+          >
+            ❮
+          </button>
 
-        {/* Right Arrow */}
-        <button
-          onClick={nextSlide}
-          className="absolute right-6 bg-black/40 text-white p-3 rounded-full"
-        >
-          ❯
-        </button>
-      </div>
+          {/* 🎬 3 CARDS ONLY */}
+          <div className="relative w-full h-[36rem] flex items-center justify-center">
 
-      {/* 🪟 Upload Modal (same UI) */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
+            {[currentIndex - 1, currentIndex, currentIndex + 1].map((i, idx) => {
+              const safeIndex =
+                (i + projects.length) % projects.length;
+
+              const proj = projects[safeIndex];
+
+              // 🛑 EXTRA SAFETY
+              if (!proj) return null;
+
+              const position = idx - 1;
+              const isCenter = position === 0;
+
+              const videoUrl = proj.videoUrl
+                ? `http://localhost:8000/video/${proj.videoUrl.split("/").pop()}`
+                : "";
+
+              return (
+                <div
+                  key={safeIndex}
+                  className="absolute rounded-3xl overflow-hidden transition-all duration-500"
+                  style={{
+                    width: isCenter ? "700px" : "500px",
+                    height: isCenter ? "400px" : "300px",
+                    transform: `translateX(${position * 420}px) scale(${isCenter ? 1 : 0.85})`,
+                    zIndex: isCenter ? 10 : 5,
+                    backgroundColor: "#000",
+                  }}
+                >
+                  {videoUrl ? (
+                    <video
+                      src={videoUrl}
+                      className="absolute inset-0 w-full h-full object-cover rounded-3xl"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-white">
+                      No Video
+                    </div>
+                  )}
+
+                  <div className="absolute inset-0 bg-black/30 rounded-3xl" />
+
+                  <div className="relative z-10 p-6 text-white h-full flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-2xl font-bold">{proj.title}</h3>
+                      <p className="mt-2 text-sm">{proj.description}</p>
+                    </div>
+
+                    <button
+                      onClick={() =>
+                        navigate("/chat", { state: { phone: proj.phone } })
+                      }
+                      className="self-end bg-sky-400 px-4 py-2 rounded-xl"
+                    >
+                      Connect
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* RIGHT */}
+          <button
+            onClick={nextSlide}
+            className="absolute -right-16 bg-black/50 hover:bg-black/70 text-white p-5 rounded-full"
+          >
+            ❯
+          </button>
+        </>
+      )}
+    </div>
+
+    {/* 🪟 MODAL */}
+    {showModal && (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
+
+          <button
+            className="absolute top-4 right-4 text-sky-400 text-2xl"
+            onClick={() => setShowModal(false)}
+          >
+            ✖
+          </button>
+
+          <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
+            Upload Project 🎓
+          </h3>
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <input
+              type="text"
+              name="studentName"
+              placeholder="Student Name"
+              value={newProject.studentName}
+              onChange={handleInputChange}
+              required
+              className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white"
+            />
+
+            <input
+              type="text"
+              name="title"
+              placeholder="Project Title"
+              value={newProject.title}
+              onChange={handleInputChange}
+              required
+              className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white"
+            />
+
+            <textarea
+              name="description"
+              placeholder="Project Description"
+              value={newProject.description}
+              onChange={handleInputChange}
+              rows={4}
+              required
+              className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white"
+            />
+
+            <input
+              type="file"
+              accept="video/*"
+              onChange={handleVideoChange}
+              required
+              className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white"
+            />
 
             <button
-              className="absolute top-4 right-4 text-sky-400 hover:text-sky-600 text-2xl font-bold"
-              onClick={() => setShowModal(false)}
+              type="submit"
+              className="bg-gradient-to-r from-sky-400 to-cyan-500 text-white py-3 rounded-2xl"
             >
-              ✖
+              Upload Project
             </button>
-
-            <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
-              Upload Project 🎓
-            </h3>
-
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <input
-                type="text"
-                name="studentName"
-                placeholder="Student Name"
-                value={newProject.studentName}
-                onChange={handleInputChange}
-                required
-                className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white placeholder-white/70"
-              />
-
-              <input
-                type="text"
-                name="title"
-                placeholder="Project Title"
-                value={newProject.title}
-                onChange={handleInputChange}
-                required
-                className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white placeholder-white/70"
-              />
-
-              <textarea
-                name="description"
-                placeholder="Project Description"
-                value={newProject.description}
-                onChange={handleInputChange}
-                rows={4}
-                required
-                className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white placeholder-white/70 resize-none"
-              />
-
-              <input
-                type="file"
-                accept="video/*"
-                onChange={handleVideoChange}
-                required
-                className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white"
-              />
-
-              <button
-                type="submit"
-                className="bg-gradient-to-r from-sky-400 to-cyan-500 hover:from-sky-500 hover:to-cyan-600 text-white py-3 rounded-2xl font-semibold shadow-lg"
-              >
-                Upload Project
-              </button>
-            </form>
-          </div>
+          </form>
         </div>
-      )}
-    </section>
-  );
+      </div>
+    )}
+  </section>
+);
 }
 
 
@@ -689,34 +705,39 @@ export function StudentMarket() {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
   return (
-    <div className="font-sans mt-10 mb-14 px-6 bg-white">
+    <div className="font-sans mt-[40px] mb-20 px-6 bg-white">
       {/* 🔍 Search + Title */}
-      <div className="flex flex-col sm:flex-row items-center mb-28 gap-10">
-        <div className="w-full sm:w-[45%] max-w-[500px]">
-          <div className="relative">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={text || "Search items..."}
-              className="pl-[60px] pr-4 focus:outline-none focus:border-sky-100 focus:ring-sky-100 focus:ring-1 
-                         w-full border-[2px] h-[45px] rounded-2xl placeholder:italic"
-            />
-            <button className="absolute top-0 right-0 h-full px-5 bg-sky-200 hover:bg-sky-300 text-white rounded-e-2xl transition-all shadow-md">
-              <i className="fas fa-search"></i>
-            </button>
-          </div>
-        </div>
+<div className="max-w-7xl mx-auto mb-[80px] flex items-center justify-between px-6 py-4">
 
-        <div className="flex flex-col justify-center items-center ml-[40px] text-center">
-          <h2 className="text-[2rem] font-bold text-gray-700 flex items-center gap-3">
-            🛒 Buy & Sell Items
-          </h2>
-          <p className="text-gray-500 mt-1">
-            Discover great deals on student products!
-          </p>
-        </div>
-      </div>
+  {/* 🛒 LEFT SIDE (TITLE + SUBTITLE) */}
+  <div>
+    <h2 className="text-[3rem] font-bold text-gray-800 flex items-center gap-2">
+      🛒 Buy & Sell Items
+    </h2>
+
+  </div>
+
+  {/* 🔍 RIGHT SIDE (SEARCH) */}
+  <div className="w-[380px] relative">
+    <input
+      type="text"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      placeholder={text || "Search items..."}
+      className="pl-[20px] pr-14 w-full h-[48px] rounded-2xl
+                 bg-white/70 backdrop-blur-md border border-gray-200
+                 text-gray-700 placeholder-gray-400
+                 focus:outline-none focus:ring-2 focus:ring-sky-200 shadow-md"
+    />
+
+    <button className="absolute top-0 right-0 h-full px-5
+                       bg-sky-300 hover:bg-sky-400
+                       text-white rounded-e-2xl transition">
+      <i className="fas fa-search"></i>
+    </button>
+  </div>
+
+</div>
 
       {/* 🖼️ Display Items */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -805,32 +826,6 @@ export function StudentMarket() {
 }
 
 
-// ---------------- 6. Footer ----------------
-export const Footer = () => { // Changed from 'const' to 'export const'
-  return (
-    <footer style={{ width: "100%", backgroundColor: "white" }}>
-      <div
-        style={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <img
-          src={f1}
-          alt="Image 1"
-          style={{ width: "50%", height: "auto", objectFit: "cover" }}
-        />
-        <img
-          src={f2}
-          alt="Image 2"
-          style={{ width: "50%", height: "auto", objectFit: "cover" }}
-        />
-      </div>
-    </footer>
-  );
-};
 
 // ---------------- 7. SellItemModal ----------------
 export function SellItemModal() {
