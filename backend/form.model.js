@@ -118,6 +118,20 @@ const SignupUser = mongoose.model("SignupUser", signupuserSchema);
 const SellItem = mongoose.model("SellItem", SellItemSchema);
 const Message = mongoose.model("Message", MessageSchema);
 
+/* 🔥 ADD THIS RIGHT HERE */
+Message.collection.createIndex({ senderId: 1, receiverId: 1 });
+Message.collection.createIndex({ timestamp: -1 });
+
+/* Export */
+module.exports = {
+  Note,
+  Project,
+  LoginUser,
+  SignupUser,
+  SellItem,
+  Message,
+};
+
 /* Export */
 module.exports = {
   Note,

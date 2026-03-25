@@ -301,7 +301,13 @@ app.put("/mark-read/:user1/:user2", authMiddleware, async (req, res) => {
 app.post("/send-message", authMiddleware, async (req, res) => {
   try {
     const { senderId, receiverId, message } = req.body;
-    const msg = new Message({ senderId, receiverId, message });
+const msg = new Message({
+  senderId,
+  receiverId,
+  message,
+  timestamp: Date.now(),
+  read: false
+});
     await msg.save();
     res.json(msg);
   } catch (err) {
@@ -309,30 +315,69 @@ app.post("/send-message", authMiddleware, async (req, res) => {
   }
 });
 
-app.get("/chat-users/:userId", authMiddleware, async (req, res) => {
+app.get("/chat-users-fast/:userId", authMiddleware, async (req, res) => {
   try {
     const userId = req.params.userId;
 
+    // 🔥 Step 1: get all messages where user is involved
     const messages = await Message.find({
-      $or: [{ senderId: userId }, { receiverId: userId }]
+      $or: [
+        { senderId: userId },
+        { receiverId: userId }
+      ]
+    }).sort({ timestamp: -1 });
+
+    // 🔥 Step 2: extract unique user IDs (chat partners)
+    const userIdsSet = new Set();
+
+    messages.forEach((msg) => {
+      if (msg.senderId !== userId) userIdsSet.add(msg.senderId);
+      if (msg.receiverId !== userId) userIdsSet.add(msg.receiverId);
     });
 
-    const userIds = new Set();
-    messages.forEach(m => {
-      if (m.senderId.toString() !== userId) userIds.add(m.senderId.toString());
-      if (m.receiverId.toString() !== userId) userIds.add(m.receiverId.toString());
-    });
+    const chatUserIds = Array.from(userIdsSet);
 
+    // ❗ If no chats yet
+    if (chatUserIds.length === 0) {
+      return res.json([]);
+    }
+
+    // 🔥 Step 3: fetch only those users
     const users = await SignupUser.find({
-      _id: { $in: Array.from(userIds) }
+      _id: { $in: chatUserIds }
     }).select("-password");
 
-    res.json(users);
+    // 🔥 Step 4: attach last message + unread
+    const result = users.map((u) => {
+      const lastMsg = messages.find(
+        (m) =>
+          (m.senderId.toString() === userId &&
+            m.receiverId.toString() === u._id.toString()) ||
+          (m.receiverId.toString() === userId &&
+            m.senderId.toString() === u._id.toString())
+      );
+
+      return {
+        ...u._doc,
+        lastMessageTime: lastMsg?.timestamp || 0,
+        hasUnread:
+          lastMsg &&
+          lastMsg.senderId.toString() !== userId &&
+          !lastMsg.read,
+      };
+    });
+
+    result.sort((a, b) => b.lastMessageTime - a.lastMessageTime);
+
+    res.json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Error fetching chat users" });
   }
 });
+
+
+
 app.get("/preview/:filename", (req, res) => {
   const filePath = path.join(__dirname, "uploads", req.params.filename);
 
@@ -468,12 +513,20 @@ const io = new Server(http, {
   }
 });
 
+let onlineUsers = [];
+
 io.on("connection", (socket) => {
   console.log("🔌 Socket connected:", socket.id);
 
+  socket.on("addUser", (userId) => {
+    if (!onlineUsers.some((u) => u.userId === userId)) {
+      onlineUsers.push({ userId, socketId: socket.id });
+    }
+    console.log("🟢 Online users:", onlineUsers);
+  });
+
   socket.on("joinRoom", (roomId) => {
     socket.join(roomId);
-    console.log("👥 Joined room:", roomId);
   });
 
   socket.on("sendMessage", (data) => {
@@ -481,7 +534,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("❌ Socket disconnected:", socket.id);
+    onlineUsers = onlineUsers.filter((u) => u.socketId !== socket.id);
+    console.log("❌ Disconnected:", socket.id);
   });
 });
 

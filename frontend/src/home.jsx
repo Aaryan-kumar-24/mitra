@@ -224,25 +224,25 @@ const features = [
     title: "🚀 Projects Showcase", 
     description: "Showcase your projects or find collaborators for new ideas and innovations.", 
     image: project, 
-    link: "/projects" 
+    link: "/" 
   },
   { 
     title: "🎯 College Events", 
     description: "Stay updated with hackathons, ideathons, workshops, and campus events.", 
     image: events, 
-    link: "/events" 
+    link: "/" 
   },
   { 
     title: "🛒 Marketplace", 
     description: "Buy or sell used items like books, electronics, or notes – all within your campus.", 
     image: sell, 
-    link: "/marketplace" 
+    link: "/" 
   },
   { 
     title: "🤖 Chatbot & Help", 
     description: "Ask doubts, request help, or get quick answers powered by smart AI assistance.", 
     image: chatbot, 
-    link: "/chatbot" 
+    link: "/" 
   }
 ];
 
@@ -557,70 +557,77 @@ return (
     </div>
 
     {/* 🪟 MODAL */}
-    {showModal && (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
+{showModal && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-white/20 backdrop-blur-md rounded-3xl shadow-2xl w-96 p-8 relative border border-sky-200">
 
-          <button
-            className="absolute top-4 right-4 text-sky-400 text-2xl"
-            onClick={() => setShowModal(false)}
-          >
-            ✖
-          </button>
+      <button
+        className="absolute top-4 right-4 text-sky-400 text-2xl"
+        onClick={() => setShowModal(false)}
+      >
+        ✖
+      </button>
 
-          <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
-            Upload Project 🎓
-          </h3>
+      <h3 className="text-3xl font-extrabold mb-6 text-white text-center">
+        Upload Project 🎓
+      </h3>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            <input
-              type="text"
-              name="studentName"
-              placeholder="Student Name"
-              value={newProject.studentName}
-              onChange={handleInputChange}
-              required
-              className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white"
-            />
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
-            <input
-              type="text"
-              name="title"
-              placeholder="Project Title"
-              value={newProject.title}
-              onChange={handleInputChange}
-              required
-              className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white"
-            />
+        {/* Student Name */}
+        <input
+          type="text"
+          name="studentName"
+          placeholder="Student Name"
+          value={newProject.studentName}
+          onChange={handleInputChange}
+          required
+          className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white placeholder-white outline-none focus:ring-2 focus:ring-sky-300"
+        />
 
-            <textarea
-              name="description"
-              placeholder="Project Description"
-              value={newProject.description}
-              onChange={handleInputChange}
-              rows={4}
-              required
-              className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white"
-            />
+        {/* Title */}
+        <input
+          type="text"
+          name="title"
+          placeholder="Project Title"
+          value={newProject.title}
+          onChange={handleInputChange}
+          required
+          className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white placeholder-white outline-none focus:ring-2 focus:ring-sky-300"
+        />
 
-            <input
-              type="file"
-              accept="video/*"
-              onChange={handleVideoChange}
-              required
-              className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white"
-            />
+        {/* Description */}
+        <textarea
+          name="description"
+          placeholder="Project Description"
+          value={newProject.description}
+          onChange={handleInputChange}
+          rows={4}
+          required
+          className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white placeholder-white outline-none focus:ring-2 focus:ring-sky-300"
+        />
 
-            <button
-              type="submit"
-              className="bg-gradient-to-r from-sky-400 to-cyan-500 text-white py-3 rounded-2xl"
-            >
-              Upload Project
-            </button>
-          </form>
-        </div>
-      </div>
-    )}
+        {/* File */}
+        <input
+          type="file"
+          accept="video/*"
+          onChange={handleVideoChange}
+          required
+          className="border border-sky-300 rounded-2xl p-3 bg-white/30 text-white file:text-white file:bg-transparent file:border-0"
+        />
+
+        {/* Submit */}
+        <button
+          type="submit"
+          className="bg-gradient-to-r from-sky-400 to-cyan-500 text-white py-3 rounded-2xl hover:scale-105 transition"
+        >
+          Upload Project
+        </button>
+
+      </form>
+    </div>
+  </div>
+)}
   </section>
 );
 }

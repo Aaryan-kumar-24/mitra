@@ -60,26 +60,36 @@ function Footer() {
                 Stay Connected
               </h3>
 
-              <div className="flex gap-4 mb-4">
+<div className="flex gap-4 mb-4">
 
-                <a href="#" className="w-10 h-10 flex items-center justify-center rounded-full bg-sky-100 hover:bg-sky-400 hover:text-white transition">
-                  <i className="fab fa-facebook-f"></i>
-                </a>
+  {/* Facebook */}
+  <a href="#"
+    className="group w-11 h-11 flex items-center justify-center rounded-full 
+   
+    transform hover:-translate-y-1 transition duration-300">
+    
+    <i className="fab fa-facebook-f text-sm group-hover:scale-110 transition"></i>
+  </a>
 
-                <a href="https://www.instagram.com/_aaryan__24/" className="w-10 h-10 flex items-center justify-center rounded-full bg-pink-100 hover:bg-pink-500 hover:text-white transition">
-                  <i className="fab fa-instagram"></i>
-                </a>
+  {/* Instagram */}
+  <a href="https://www.instagram.com/_aaryan__24/"
+    className="group w-11 h-11 flex items-center justify-center rounded-full 
+   
+    transform hover:-translate-y-1 transition duration-300">
+    
+    <i className="fab fa-instagram text-sm group-hover:scale-110 transition"></i>
+  </a>
 
-                <a href="https://youtube.com/@aryavarta_twinbro" className="w-10 h-10 flex items-center justify-center rounded-full bg-red-100 hover:bg-red-500 hover:text-white transition">
-                  <i className="fab fa-youtube"></i>
-                </a>
+  {/* YouTube */}
+  <a href="https://youtube.com/@aryavarta_twinbro"
+    className="group w-11 h-11 flex items-center justify-center rounded-full 
+   
+    transform hover:-translate-y-1 transition duration-300">
+    
+    <i className="fab fa-youtube text-sm group-hover:scale-110 transition"></i>
+  </a>
 
-              </div>
-
-              {/* CTA */}
-              <button className="mt-2 bg-gradient-to-r from-sky-400 to-cyan-500 text-white px-5 py-2 rounded-full shadow-md hover:scale-105 transition">
-                Join Community 🚀
-              </button>
+</div>
             </div>
 
           </div>

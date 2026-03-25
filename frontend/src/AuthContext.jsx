@@ -9,7 +9,23 @@ export function AuthProvider({ children }) {
   });
   const [token, setToken] = useState(() => localStorage.getItem("token") || null);
   const [isAuthenticated, setIsAuthenticated] = useState(!!token);
+useEffect(() => {
+  const storedToken = localStorage.getItem("token");
 
+  if (storedToken && !user) {
+    axios.get("http://localhost:8000/user-data", {
+      headers: { Authorization: `Bearer ${storedToken}` },
+    })
+    .then((res) => {
+      setUser(res.data);
+      setToken(storedToken);
+    })
+    .catch(() => {
+      setUser(null);
+      setToken(null);
+    });
+  }
+}, []);
   useEffect(() => {
     if (token) {
       localStorage.setItem("token", token);
@@ -25,13 +41,19 @@ export function AuthProvider({ children }) {
     else localStorage.removeItem("user");
   }, [user]);
 
-  const login = async (phone, password) => {
-    const res = await axios.post("http://localhost:8000/login-user", { phone, password });
-    const { token: tkn, user: userdata } = res.data;
-    setToken(tkn);
-    setUser(userdata);
-    return res.data;
-  };
+const login = async (phone, password) => {
+  const res = await axios.post("http://localhost:8000/login-user", { phone, password });
+
+  const { token: tkn, user: userdata } = res.data;
+
+  localStorage.setItem("token", tkn);   // 🔥 MUST ADD
+  localStorage.setItem("user", JSON.stringify(userdata)); // 🔥 ADD
+
+  setToken(tkn);
+  setUser(userdata);
+
+  return res.data;
+};
 
   const signup = async (payload) => {
     const res = await axios.post("http://localhost:8000/signup-user", payload);

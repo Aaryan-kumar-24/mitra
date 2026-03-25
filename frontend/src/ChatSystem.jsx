@@ -4,8 +4,6 @@ import { Header } from "./header";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
 import EmojiPicker from "emoji-picker-react";
-import { UNSAFE_WithHydrateFallbackProps } from "react-router-dom";
-
 import { useLocation } from "react-router-dom";
 
 
@@ -26,7 +24,6 @@ const getProfileImageUrl = (relativePath) => {
     return `http://localhost:8000${relativePath}`;
 };
 
-const socket = io("http://localhost:8000", { autoConnect: true });
 
 export default function ChatSystem() {
   const { user } = useContext(AuthContext);
@@ -54,6 +51,19 @@ const room = selectedUser
 const location = useLocation();
 const passedPhone = location.state?.phone;
 
+const socketRef = useRef();
+
+useEffect(() => {
+  if (!token) return;
+
+  socketRef.current = io("http://localhost:8000", {
+    auth: { token },
+  });
+
+  return () => {
+    socketRef.current.disconnect();
+  };
+}, [token]);
 
 const autoOpenChatByPhone = async (phone) => {
   try {
@@ -78,63 +88,38 @@ const autoOpenChatByPhone = async (phone) => {
   }
 };
 useEffect(() => {
-  if (passedPhone && user) {
+  if (passedPhone && user && token) {
     autoOpenChatByPhone(passedPhone);
   }
-}, [passedPhone, user]);
-
+}, [passedPhone, user, token]);
 
 
   // --- LOGIC FUNCTIONS (Unchanged for stability) ---
+useEffect(() => {
+  if (!user?._id || !token) return;
 
-  useEffect(() => {
-    if (user) loadChatUsers();
-  }, [user]);
+  loadChatUsers();
+}, [user, token]);
 
-  const loadChatUsers = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8000/chat-users/${user._id}`,
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-      );
+const loadChatUsers = async () => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/chat-users-fast/${user._id}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-      const users = res.data;
+    setChatUsers(res.data);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-      const usersWithLastMessage = await Promise.all(
-        users.map(async (u) => {
-          const messagesRes = await axios.get(
-            `http://localhost:8000/messages/${user._id}/${u._id}?limit=1&sort=desc`,
-            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-          );
-          const lastMsg = messagesRes.data[0];
+useEffect(() => {
+  if (!user?._id || !socketRef.current) return;
 
-          const hasUnread =
-            lastMsg && lastMsg.senderId !== user._id && !lastMsg.read;
+  socketRef.current?.emit("addUser", user._id);
 
-          return {
-            ...u,
-            lastMessageTime: lastMsg?.timestamp || 0,
-            hasUnread,
-          };
-        })
-      );
-
-      usersWithLastMessage.sort(
-        (a, b) => (b.lastMessageTime || 0) - (a.lastMessageTime || 0)
-      );
-
-      setChatUsers(usersWithLastMessage);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    if (!user) return;
-
-    socket.emit("addUser", user._id);
-
-    socket.on("receiveMessage", (msg) => {
+    socketRef.current.on("receiveMessage", (msg) => {
       setMessages((prev) => {
         const exists = prev.some(
           (m) =>
@@ -158,15 +143,15 @@ useEffect(() => {
       );
     });
 
-    socket.on("typing", (data) => {
+    socketRef.current.on("typing", (data) => {
       if (selectedUser?._id === data.senderId) setTyping(data.typing);
     });
 
     return () => {
-      socket.off("receiveMessage");
-      socket.off("typing");
+      socketRef.current.off("receiveMessage");
+      socketRef.current.off("typing");
     };
-  }, [selectedUser, user]);
+}, [selectedUser, user, token]);
 
   useEffect(() => {
     if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -178,7 +163,7 @@ useEffect(() => {
     try {
       const res = await axios.get(
         `http://localhost:8000/search-user/${phone}`,
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       const foundUser = res.data;
@@ -202,27 +187,29 @@ useEffect(() => {
     clearTimeout(searchTimeout.current);
     searchTimeout.current = setTimeout(() => {
       if (value) handleSearch(value);
-    }, 500);
+    }, 300);
   };
 
-  const loadMessages = async (receiverId) => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8000/messages/${user._id}/${receiverId}?sort=asc`,
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-      );
-      setMessages(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+const loadMessages = async (receiverId) => {
+  console.log("Loading messages for:", receiverId);
+  try {
+    const res = await axios.get(
+      `http://localhost:8000/messages/${user._id}/${receiverId}?limit=50&sort=desc`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    setMessages(res.data.reverse());
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const selectUserFromList = async (u) => {
     setSelectedUser(u);
     await loadMessages(u._id);
 
     const room = [user._id, u._id].sort().join("_");
-    socket.emit("joinRoom", room);
+    socketRef.current?.emit("joinRoom", room);
 
     setChatUsers((prev) =>
       prev.map((userItem) =>
@@ -230,37 +217,44 @@ useEffect(() => {
       )
     );
 
-    axios.put(
-      `http://localhost:8000/mark-read/${user._id}/${u._id}`,
-      {},
-      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-    );
+axios.put(
+  `http://localhost:8000/mark-read/${user._id}/${u._id}`,
+  {},
+  { headers: { Authorization: `Bearer ${token}` } }
+);
   };
 
-  const sendMessage = async () => {
-    if (!sendMsg.trim() || !selectedUser) return;
+const sendMessage = async () => {
+  if (!sendMsg.trim() || !selectedUser) return;
 
-    const msg = {
-      room: [user._id, selectedUser._id].sort().join("_"),
-      senderId: user._id,
-      receiverId: selectedUser._id,
-      message: sendMsg,
-      timestamp: Date.now(),
-      read: false,
-    };
+  const msg = {
+    room,
+    senderId: user._id,
+    receiverId: selectedUser._id,
+    message: sendMsg,
+    timestamp: Date.now(),
+    read: false,
+  };
 
-    socket.emit("sendMessage", msg);
+  // 🔥 instant UI update
+  setMessages((prev) => [...prev, msg]);
 
+  socketRef.current?.emit("sendMessage", msg);
+
+  setSendMsg("");
+
+  try {
     await axios.post("http://localhost:8000/send-message", msg, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     });
-
-    setSendMsg("");
-  };
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const handleTyping = (e) => {
     setSendMsg(e.target.value);
-    socket.emit("typing", {
+    socketRef.current?.emit("typing", {
       senderId: user._id,
       receiverId: selectedUser?._id,
       typing: true,
@@ -268,7 +262,7 @@ useEffect(() => {
 
     clearTimeout(typingTimeout.current);
     typingTimeout.current = setTimeout(() => {
-      socket.emit("typing", {
+      socketRef.current?.emit("typing", {
         senderId: user._id,
         receiverId: selectedUser?._id,
         typing: false,
@@ -298,7 +292,7 @@ const handleFileUpload = async (e) => {
       }
     );
 
-    socket.emit("sendMessage", {
+    socketRef.current?.emit("sendMessage", {
       room,
       ...res.data,
     });
@@ -402,7 +396,12 @@ const handleFileUpload = async (e) => {
 
           {/* User List Scrollable Area */}
           <div style={{ overflowY: "auto", flex: 1 }}>
-            {chatUsers.map((u) => (
+{chatUsers.length === 0 ? (
+  <p style={{ textAlign: "center", color: "#999" }}>
+    No users found
+  </p>
+) : (
+  chatUsers.map((u) => (
               <div
                 key={u._id}
                 onClick={() => selectUserFromList(u)}
@@ -424,9 +423,9 @@ const handleFileUpload = async (e) => {
                 <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
                   
                   {/* 👇️ 1. USER LIST AVATAR LOGIC */}
-                  {u.avatar ? (
-                    <img 
-                      src={getProfileImageUrl(u.avatar)} 
+{(u.avatar || u.profileUrl) ? (
+  <img 
+    src={getProfileImageUrl(u.avatar || u.profileUrl)} 
                       alt={u.name[0]} 
                       style={{
                           width: 48,
@@ -485,7 +484,7 @@ const handleFileUpload = async (e) => {
                     </div>
                 </div>
               </div>
-            ))}
+            )))}
           </div>
         </div>
 
@@ -513,9 +512,9 @@ const handleFileUpload = async (e) => {
             {selectedUser ? (
                 <>
                     {/* 👇️ 2. CHAT HEADER AVATAR LOGIC */}
-                    {selectedUser.avatar ? (
-                      <img
-                        src={getProfileImageUrl(selectedUser.avatar)}
+{(selectedUser.avatar || selectedUser.profileUrl) ? (
+  <img
+    src={getProfileImageUrl(selectedUser.avatar || selectedUser.profileUrl)}
                         alt={selectedUser.name[0]}
                         style={{
                           width: 55, height: 55,
